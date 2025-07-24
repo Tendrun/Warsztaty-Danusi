@@ -1,0 +1,6 @@
+@PackageTracker.Api_HostAddress = http://localhost:5073
+
+GET {{PackageTracker.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
