@@ -19,7 +19,7 @@ paths:
   /users:
     get:
       security:
-        - OAuth2: [admin]
+        - bearerAuth: []
       responses:
         "200":
           description: OK
@@ -119,7 +119,7 @@ paths:
     delete:
       summary: Delete a user by ID
       security:
-        - OAuth2: [admin]
+        - bearerAuth: []
       parameters:
         - in: path 
           name: id 
@@ -329,23 +329,137 @@ paths:
           description: ok
         400:
           description: Bad Request
-          
+    
+  /packages/{id}:
+    get:
+      summary: "Get package by ID"
+      parameters:
+        - in: path 
+          name: id
+          description: "Get services supported by a carrier"
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Package'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Package'
+        400:
+          description: Bad Request
+    put:
+      summary: "Update package information"
+      parameters:
+        - in: path 
+          name: id
+          description: "Update package information"
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Package'
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad Request
+    delete:
+      summary: "Delete a package"
+      parameters:
+        - in: path 
+          name: id
+          description: "Delete a package"
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Package'
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad Request
+  
+  /packages/{trackingNumber}/track:
+    get:
+      summary: "Track package by tracking number"
+      parameters:
+        - in: path
+          name: trackingNumber
+          required: true
+          description: "Tracking number of the package"
+          schema:
+            type: string        
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Package'
+        "400":
+          description: Bad Request
 
+  /packages/{id}/status:
+    put:
+      summary: Update package status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  $ref: '#/components/schemas/PackageStatus'
+                notes:
+                  type: string
+                  description: Optional notes about the status change
+              required:
+                - status
+      responses:
+        200:
+          description: Status updated successfully
+        400:
+          description: Invalid status transition
+        404:
+          description: Package not found
+          
+  /packages/{id}/history:
+    get:
+      summary: "Get package status history"
+      parameters:
+        - in: path 
+          name: id
+          description: "Get package status history"
+          required: true
+          schema:
+            type: string        
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request  
 
 components:
-
+  
 
   securitySchemes:
-    OAuth2:
-      type: oauth2
-      flows:
-        authorizationCode:
-          authorizationUrl: https://example.com/oauth/authorize
-          tokenUrl: https://example.com/oauth/token
-          scopes:
-            read: Grants read access
-            write: Grants write access
-            admin: Grants access to admin operations
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
             
   schemas:
   
@@ -530,3 +644,20 @@ components:
         - "InDelivery"
         - "Delivered"
       description: Current status of the package
+    
+    PackageStatusHistory:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        packageId:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/PackageStatus'
+        timestamp:
+          type: string
+          format: date-time
+        notes:
+          type: string
