@@ -1,0 +1,110 @@
+openapi: 3.0.3
+info:
+  title: Example yaml
+  description: Creating example yaml
+  version: 0.0.1
+
+servers:
+  - url: http://api.example.com/v1
+    description: Example endpoint
+  - url: http://staging-api.example.com
+    description: Second example endpoint
+
+paths:
+  /packages:
+    get:
+      summary: List all packages
+      description: List all packages
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Package'
+    post:
+      summary: Create a new package
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Package'
+      responses:
+        "201":
+          description: Package created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Package'
+
+  /packages/{id}:
+    get:
+      summary: Get a package by ID
+      parameters:
+      - name: id
+        required: true
+        in: path
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Package found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Package'
+        "404":
+          description: Package not found
+
+components:
+  schemas:
+    Package:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        weight:
+          type: number
+          format: float
+        status:
+          type: string
+          enum: [pending, shipped, delivered]
+      required:
+        - id
+        - name
+        - weight
+        - status
+
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+    OpenID:
+      type: openIdConnect
+      openIdConnectUrl: https://example.com/.well-known/openid-configuration
+
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://example.com/oauth/authorize
+          tokenUrl: https://example.com/oauth/token
+          scopes:
+            read: Grants read access
+            write: Grants write access
+            admin: Grants access to admin operations

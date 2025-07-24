@@ -1,0 +1,532 @@
+openapi: 3.0.3
+info:
+  title: Example yaml
+  description: Creating example yaml
+  version: 0.0.1
+
+
+servers: 
+  - url: http://localhost:8080/api/v1
+  - url: https://localhost:8080/api/v1
+
+
+paths:
+
+  ###
+  ### Users
+  ###
+  
+  /users:
+    get:
+      security:
+        - OAuth2: [admin]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+              example:
+                username: "john.doe"
+                email: "john.doe@example.com"
+                passwordHash: "securePassword123"
+                firstName: "John"
+                lastName: "Doe"
+                address: "123 Main St, Warsaw, Poland"
+                
+        "400":
+          description: Bad Request
+          
+    post:
+      summary: Create new user
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              username: "john.doe"
+              email: "john.doe@example.com"
+              passwordHash: "securePassword123"
+              firstName: "John"
+              lastName: "Doe"
+              address: "123 Main St, Warsaw, Poland"
+        
+
+
+  /users/{id}:
+    get:
+      summary: Get a user by ID
+      parameters:
+        - in: path 
+          name: id 
+          description: ID of user to get
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      responses:
+        "200":
+          description: A single user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                id: 1
+                username: "john.doe"
+                email: "john.doe@example.com"
+                firstName: "John"
+                lastName: "Doe"
+                address: "123 Main St, Warsaw, Poland"
+                createdAt: "2025-04-15T10:30:00Z"
+        "400":
+          description: Bad Request
+
+    put:
+      summary: Update user information
+      parameters:
+        - in: path 
+          name: id 
+          description: ID of user to put
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        "200":
+          description: User updated successfully
+        "400":
+          description: Bad Request
+  
+    delete:
+      summary: Delete a user by ID
+      security:
+        - OAuth2: [admin]
+      parameters:
+        - in: path 
+          name: id 
+          description: ID of user to delete
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      responses:
+        "200":
+          description: User deleted successfully
+
+
+
+  ###
+  ### Carriers
+  ###
+
+  /carriers:
+    get:
+      summary: "List all carriers"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Carrier'
+              example:
+              - id: "550e8400-e29b-41d4-a716-446655440003"
+                name: "Jan Kowalski"
+                email: "jan.kowalski@carrier.com"
+                phoneNumber: "+48123456789"
+                isActive: true
+                supportedServices:
+                  - id: "550e8400-e29b-41d4-a716-446655440001"
+                    name: "Standard"
+                    description: "Standard delivery"
+                    price: 15.99
+                  - id: "550e8400-e29b-41d4-a716-446655440002"
+                    name: "Express"
+                    description: "Next day delivery"
+                    price: 24.99
+        "400":
+          description: Bad Request
+          
+    post:
+      summary: "Create a new carrier"
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Carrier'
+            example:
+              name: "Jan Kowalski"
+              email: "jan.kowalski@carrier.com"
+              phoneNumber: "+48123456789"
+              supportedServices:
+              - id: "550e8400-e29b-41d4-a716-446655440001"
+                name: "Standard"
+              - id: "550e8400-e29b-41d4-a716-446655440002"
+                name: "Express"
+
+
+  /carriers/{id}:
+    get:
+      summary: "Get carrier by ID"
+      parameters:
+        - in: path 
+          name: id 
+          description: "Get carrier by ID"
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carrier'
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad Request
+    put:
+      summary: "Update carrier information"
+      parameters:
+        - in: path 
+          name: id 
+          description: "Update carrier information"
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carrier'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Carrier'
+            example:
+              - id: "550e8400-e29b-41d4-a716-446655440001"
+                name: "Standard"
+                description: "Standardowa dostawa w ciągu 2-3 dni roboczych"
+                price: 15.99
+              - id: "550e8400-e29b-41d4-a716-446655440002"
+                name: "Express"
+                description: "Dostawa następnego dnia roboczego"
+                price: 24.99
+      responses:
+        "200":
+          description: OK
+    delete:
+      summary: "Delete a carrier"
+      parameters:
+        - in: path 
+          name: id 
+          description: ID of pet to fetch
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carrier'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+
+
+  /carriers/{id}/services:
+    get:
+      summary: "Get services supported by a carrier"
+      parameters:
+        - in: path 
+          name: id 
+          description: "Get services supported by a carrier"
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carrier'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+    put:
+      summary: "Update carrier's supported services"
+      parameters:
+        - in: path 
+          name: id 
+          description: "Update carrier's supported services"
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carrier'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+
+  /packages:
+    get: 
+      summary: "List all packages"
+      responses:
+        "200": 
+          description: OK 
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Package'
+        "400":
+          description: Bad Request
+    
+    post:
+      summary: "Create a new package"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Package'
+            example:
+              name: "Jan Kowalski"
+              email: "jan.kowalski@carrier.com"
+              phoneNumber: "+48123456789"
+              supportedServices:
+              - id: "550e8400-e29b-41d4-a716-446655440001"
+                name: "Standard"
+              - id: "550e8400-e29b-41d4-a716-446655440002"
+                name: "Express"
+      
+      responses:
+        200: 
+          description: ok
+        400:
+          description: Bad Request
+          
+
+
+components:
+
+
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://example.com/oauth/authorize
+          tokenUrl: https://example.com/oauth/token
+          scopes:
+            read: Grants read access
+            write: Grants write access
+            admin: Grants access to admin operations
+            
+  schemas:
+  
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the user
+        username:
+          type: string
+          description: Username for login
+          example: "john.doe"
+        email:
+          type: string
+          format: email
+          description: Email address
+          example: "john.doe@example.com"
+        passwordHash:
+          type: string
+          description: Hashed password (not returned in responses)
+        firstName:
+          type: string
+          description: User's first name
+          example: "John"
+        lastName:
+          type: string
+          description: User's last name
+          example: "Doe"
+        address:
+          type: string
+          description: User's address
+          example: "123 Main St, Warsaw, Poland"
+        createdAt:
+          type: string
+          format: date-time
+          description: Account creation timestamp
+      required:
+        - username
+        - email
+        - passwordHash
+
+
+    CarrierService:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the service
+        name:
+          type: string
+          enum: [Standard, Express, International]
+          description: Service type name
+        description:
+          type: string
+          description: Detailed description of the service
+          example: "Delivery within 2-3 business days"
+        price:
+          type: number
+          format: float
+          description: Base price for the service
+          example: 15.99
+      required:
+        - name
+        - price
+
+        
+    Carrier:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the carrier
+        name:
+          type: string
+          description: Carrier's full name
+          example: "Jan Kowalski"
+        email:
+          type: string
+          format: email
+          description: Carrier's email address
+          example: "jan.kowalski@carrier.com"
+        phoneNumber:
+          type: string
+          description: Carrier's phone number
+          example: "+48123456789"
+        isActive:
+          type: boolean
+          description: Whether the carrier is currently active
+          default: true
+        supportedServices:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarrierService'
+          description: Services supported by this carrier
+      required:
+        - name
+        - email
+        - phoneNumber
+
+
+    Package:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the package
+        trackingNumber:
+          type: string
+          description: Tracking number for the package
+          example: "PL12345678"
+        status:
+          $ref: '#/components/schemas/PackageStatus'
+          description: Current status of the package
+        weight:
+          type: number
+          format: float
+          description: Weight in kilograms
+          example: 2.5
+        dimensions:
+          type: object
+          properties:
+            length:
+              type: number
+              description: Length in centimeters
+              example: 30
+            width:
+              type: number
+              description: Width in centimeters
+              example: 20
+            height:
+              type: number
+              description: Height in centimeters
+              example: 15
+        recipientAddress:
+          type: string
+          description: Delivery address
+          example: "ul. Kwiatowa 1, 00-001 Warszawa"
+        senderAddress:
+          type: string
+          description: Sender's address
+          example: "ul. Polna 5, 61-001 Poznań"
+        carrierId:
+          type: string
+          format: uuid
+          description: ID of the assigned carrier
+        userId:
+          type: string
+          format: uuid
+          description: ID of the user who created the package
+        serviceType:
+          type: string
+          enum: [Standard, Express, International]
+          description: Type of delivery service
+        createdAt:
+          type: string
+          format: date-time
+          description: Package creation timestamp
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+      required:
+        - trackingNumber
+        - status
+        - weight
+        - recipientAddress
+        - senderAddress
+        - userId
+        - serviceType
+
+    PackageStatus:
+      type: string
+      enum:
+        - "Created"
+        - "CollectedByCarrier"
+        - "InTransit"
+        - "InDelivery"
+        - "Delivered"
+      description: Current status of the package
