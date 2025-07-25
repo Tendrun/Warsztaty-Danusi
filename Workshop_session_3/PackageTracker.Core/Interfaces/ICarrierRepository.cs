@@ -10,5 +10,6 @@ namespace PackageTracker.Core.Interfaces
     public interface ICarrierRepository : IRepository<Carrier>
     {
         Task<IEnumerable<Carrier>> GetByCarrierIdAsync(Guid CarrierId);
+
     }
 }

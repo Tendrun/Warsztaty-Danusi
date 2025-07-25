@@ -1,6 +1,6 @@
-Te komendy nie działają
-dotnet ef migrations add InitialCreate
-dotnet ef database update
+Ważne trzeba zrobić bazę danych PackageTrackerDb przed stworzeniem tabel
+
+1. Łącze się z bazą danych master
 
 Próbuję wpisać:
 
