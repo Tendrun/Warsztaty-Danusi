@@ -1,0 +1,29 @@
+Te komendy nie działają
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+
+Próbuję wpisać:
+
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+dotnet add package Pomelo.EntityFrameworkCore.MySql
+
+
+dotnet tool install --global dotnet-ef
+
+dotnet ef migration add init
+Update-Database
+
+w appsettings.json trzeba dodać
+"ConnectionStrings": {
+  "DefaultConnection": "Server=localhost;Database=Master;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
+},
+
+ApplicationDbContext w PacketTracker.Core
+Ma dużo zmian(Zobacz na githubie)
+
+Dodanie migracji 
+dotnet ef migrations add Nazwa_Migracji --startup-project ../PackageTracker.Api
+Aktualizacja bazy danych po migracji
+dotnet ef database update
