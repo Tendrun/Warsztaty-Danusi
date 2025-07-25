@@ -9,7 +9,8 @@ namespace PackageTracker.Core.Interfaces
 {
     public interface ICarrierRepository : IRepository<Carrier>
     {
-        Task<IEnumerable<Carrier>> GetByCarrierIdAsync(Guid CarrierId);
-
+        Task<Carrier> GetByEmailAsync(string email);
+        Task<Carrier> GetByPhoneNumberAsync(string phoneNumber);
+        Task UpdateIsActiveAsync(int id, bool isActive);
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PackageTracker.Core.Data;
+using PackageTracker.Core.Repositories.EF;
 
 var builder = WebApplication.CreateBuilder(args);
 

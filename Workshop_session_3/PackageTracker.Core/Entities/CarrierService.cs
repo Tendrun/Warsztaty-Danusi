@@ -12,5 +12,15 @@ namespace PackageTracker.Core.Entities
         public required string Name { get; set; }
         public required string Description { get; set; }
         public required decimal Price { get; set; }
+
+        public static CarrierService createEmpty()
+        {
+            return new CarrierService
+            {
+                Name = "None",
+                Description = "None",
+                Price = 0,
+            };
+        }
     }
 }
