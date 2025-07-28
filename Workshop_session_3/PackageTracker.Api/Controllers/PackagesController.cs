@@ -18,7 +18,7 @@ namespace PackageTracker.Api.Controllers
         }
 
         [HttpPost("debug-update-status")]
-        public async Task<IActionResult> DebugUpdateStatus(int id, string status)
+        public async Task<IActionResult> DebugUpdateStatus(Guid id, string status)
         {
             await _packageService.UpdateStatusAsync(id, status, "Test z debuggera");
             return Ok();

@@ -30,13 +30,13 @@ namespace PackageTracker.Core.Repositories.Dapper
 
             using (var connection = new SqlConnection(_connectionString))
             {
-                var newId = await connection.ExecuteScalarAsync<int>(sql);
+                var newId = await connection.ExecuteScalarAsync<Guid>(sql);
                 entity.Id = newId;
                 return entity;
             }
         }
 
-        public async override Task DeleteAsync(int id)
+        public async override Task DeleteAsync(Guid id)
         {
             string sql = @"
                 DELETE FROM PACKAGES 
@@ -61,8 +61,9 @@ namespace PackageTracker.Core.Repositories.Dapper
             }
         }
 
-        public Task<IEnumerable<Package>> GetByCarrierIdAsync(int carrierId)
+        public Task<IEnumerable<Package>> GetByCarrierIdAsync(Guid carrierId)
         {
+            throw new NotImplementedException();
             /*
             string sql = @"SELECT * FROM PACKAGES
                 WHERE 
@@ -72,7 +73,7 @@ namespace PackageTracker.Core.Repositories.Dapper
             */
         }
 
-        public override Task<Package> GetByIdAsync(int id)
+        public override Task<Package> GetByIdAsync(Guid id)
         {
             throw new NotImplementedException();
         }
@@ -87,12 +88,12 @@ namespace PackageTracker.Core.Repositories.Dapper
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Package>> GetByUserIdAsync(int userId)
+        public Task<IEnumerable<Package>> GetByUserIdAsync(Guid userId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<PackageStatusHistory>> GetStatusHistoryAsync(int packageId)
+        public Task<IEnumerable<PackageStatusHistory>> GetStatusHistoryAsync(Guid packageId)
         {
             throw new NotImplementedException();
         }
@@ -102,7 +103,7 @@ namespace PackageTracker.Core.Repositories.Dapper
             throw new NotImplementedException();
         }
 
-        public Task UpdateStatusAsync(int id, string status, string notes = null)
+        public Task UpdateStatusAsync(Guid id, string status, string notes = null)
         {
             throw new NotImplementedException();
         }

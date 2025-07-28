@@ -13,9 +13,9 @@ namespace PackageTracker.Core.Interfaces
         // Wiele osób może mieszkać pod jednym adresem
         Task<IEnumerable<User>> GetByAddressAsync(string address);
 
-        Task UpdateUsernameAsync(int id, string username);
-        Task UpdatePasswordAsync(int id, string password);
-        Task UpdateFirstNameAsync(int id, string firstName);
-        Task UpdateLastNameAsync(int id, string lastName);
+        Task UpdateUsernameAsync(Guid id, string username);
+        Task UpdatePasswordAsync(Guid id, string password);
+        Task UpdateFirstNameAsync(Guid id, string firstName);
+        Task UpdateLastNameAsync(Guid id, string lastName);
     }
 }

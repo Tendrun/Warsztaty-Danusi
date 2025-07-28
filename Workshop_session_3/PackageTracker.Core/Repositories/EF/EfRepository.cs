@@ -28,7 +28,7 @@ namespace PackageTracker.Core.Repositories.EF
             return entity;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Guid id)
         {
             var entity = await GetByIdAsync(id);
 
@@ -44,7 +44,7 @@ namespace PackageTracker.Core.Repositories.EF
             return await _dbSet.ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(Guid id)
         {
             return await _dbSet.FindAsync(id);
         }

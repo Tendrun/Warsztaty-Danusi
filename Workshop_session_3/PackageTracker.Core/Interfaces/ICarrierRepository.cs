@@ -11,6 +11,6 @@ namespace PackageTracker.Core.Interfaces
     {
         Task<Carrier> GetByEmailAsync(string email);
         Task<Carrier> GetByPhoneNumberAsync(string phoneNumber);
-        Task UpdateIsActiveAsync(int id, bool isActive);
+        Task UpdateIsActiveAsync(Guid id, bool isActive);
     }
 }

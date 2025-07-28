@@ -28,7 +28,7 @@ namespace PackageTracker.Core.Repositories.EF
                 ?? Carrier.createEmpty();
         }
 
-        public async Task UpdateIsActiveAsync(int id, bool isActive)
+        public async Task UpdateIsActiveAsync(Guid id, bool isActive)
         {
             var carrier = await _dbSet
                 .FirstOrDefaultAsync(c => c.Id == id);

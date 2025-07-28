@@ -11,10 +11,10 @@ namespace PackageTracker.Core.Entities
     {
         public Package() { }
 
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public required string TrackingNumber { get; set; }
 
-        public int StatusId { get; set; }
+        public Guid StatusId { get; set; }
         public required PackageStatus Status { get; set; }
 
         public decimal? Weight;
@@ -25,10 +25,10 @@ namespace PackageTracker.Core.Entities
         public required string RecipientAddress;
         public required string SenderAddress;
 
-        public int CarrierId { get; set; }
+        public Guid CarrierId { get; set; }
         public required Carrier Carrier { get; set; }
 
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public required User User { get; set; }
 
         public required int ServiceTypeId { get; set; }
@@ -42,12 +42,12 @@ namespace PackageTracker.Core.Entities
             return new Package
             {
                 TrackingNumber = "",
-                Status = new PackageStatus { Id = 0, Name = "Unknown" },
-                StatusId = 0,
+                Status = new PackageStatus { Id = Guid.Empty, Name = "Unknown" },
+                StatusId = Guid.Empty,
                 Carrier = Carrier.createEmpty(),
-                CarrierId = 0,
+                CarrierId = Guid.Empty,
                 User = User.createEmpty(),
-                UserId = 0,
+                UserId = Guid.Empty,
                 ServiceType = CarrierService.createEmpty(),
                 ServiceTypeId = 0,
                 RecipientAddress = "",

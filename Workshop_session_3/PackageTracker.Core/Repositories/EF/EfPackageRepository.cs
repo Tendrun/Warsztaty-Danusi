@@ -18,7 +18,7 @@ namespace PackageTracker.Core.Repositories.EF
 
         // Implementation of IPackageRepository methods
 
-        public async Task<IEnumerable<Package>> GetByCarrierIdAsync(int carrierId)
+        public async Task<IEnumerable<Package>> GetByCarrierIdAsync(Guid carrierId)
         {
             return await _dbSet
                 .Where(p => p.CarrierId == carrierId)
@@ -40,14 +40,14 @@ namespace PackageTracker.Core.Repositories.EF
                 ?? Package.CreateEmpty();
         }
 
-        public async Task<IEnumerable<Package>> GetByUserIdAsync(int userId)
+        public async Task<IEnumerable<Package>> GetByUserIdAsync(Guid userId)
         {
             return await _dbSet
                 .Where(p => p.UserId == userId)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<PackageStatusHistory>> GetStatusHistoryAsync(int packageId)
+        public async Task<IEnumerable<PackageStatusHistory>> GetStatusHistoryAsync(Guid packageId)
         {
             return await _context.PackageStatusHistories
                 .Where(p => p.PackageId == packageId)
@@ -55,7 +55,7 @@ namespace PackageTracker.Core.Repositories.EF
                 .ToListAsync();
         }
 
-        public async Task UpdateStatusAsync(int id, string status, string notes = null)
+        public async Task UpdateStatusAsync(Guid id, string status, string notes = null)
         {
             var transaction = await _context.Database.BeginTransactionAsync();
 

@@ -9,11 +9,11 @@ namespace PackageTracker.Core.Interfaces
 {
     public interface IPackageRepository : IRepository<Package>
     {
-        Task<IEnumerable<Package>> GetByUserIdAsync(int userId);
-        Task<IEnumerable<Package>> GetByCarrierIdAsync(int carrierId);
+        Task<IEnumerable<Package>> GetByUserIdAsync(Guid userId);
+        Task<IEnumerable<Package>> GetByCarrierIdAsync(Guid carrierId);
         Task<IEnumerable<Package>> GetByStatusAsync(string status);
         Task<Package> GetByTrackingNumberAsync(string trackingNumber);
-        Task UpdateStatusAsync(int id, string status, string notes = null);
-        Task<IEnumerable<PackageStatusHistory>> GetStatusHistoryAsync(int packageId);
+        Task UpdateStatusAsync(Guid id, string status, string notes = null);
+        Task<IEnumerable<PackageStatusHistory>> GetStatusHistoryAsync(Guid packageId);
     }
 }

@@ -28,7 +28,7 @@ namespace PackageTracker.Core.Repositories.EF
                 ?? User.createEmpty();
         }
 
-        public async Task UpdateFirstNameAsync(int id, string firstName)
+        public async Task UpdateFirstNameAsync(Guid id, string firstName)
         {
             var user = await _dbSet.FirstOrDefaultAsync(u => u.Id == id);
 
@@ -39,7 +39,7 @@ namespace PackageTracker.Core.Repositories.EF
             _context.SaveChanges();
         }
 
-        public async Task UpdateLastNameAsync(int id, string lastName)
+        public async Task UpdateLastNameAsync(Guid id, string lastName)
         {
             var user = await _dbSet.FirstOrDefaultAsync(u => u.Id == id);
 
@@ -50,7 +50,7 @@ namespace PackageTracker.Core.Repositories.EF
             _context.SaveChanges();
         }
 
-        public async Task UpdatePasswordAsync(int id, string password)
+        public async Task UpdatePasswordAsync(Guid id, string password)
         {
             string hashPassowrd = HashPassword(password);
 
@@ -65,7 +65,7 @@ namespace PackageTracker.Core.Repositories.EF
             _context.SaveChanges();
         }
 
-        public async Task UpdateUsernameAsync(int id, string username)
+        public async Task UpdateUsernameAsync(Guid id, string username)
         {
             var Username = await _dbSet
                 .FirstOrDefaultAsync(u => u.Id == id);
