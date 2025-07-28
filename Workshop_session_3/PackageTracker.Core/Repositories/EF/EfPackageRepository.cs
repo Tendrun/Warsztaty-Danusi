@@ -59,9 +59,9 @@ namespace PackageTracker.Core.Repositories.EF
         {
             var transaction = await _context.Database.BeginTransactionAsync();
 
-            var package = _dbSet
+            var package = await _dbSet
                 .Include(p => p.Status)
-                .FirstOrDefaultAsync(p => p.Id == id).Result;
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if(package == null) 
                 return;
