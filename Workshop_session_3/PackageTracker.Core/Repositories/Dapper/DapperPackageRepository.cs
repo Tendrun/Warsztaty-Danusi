@@ -22,15 +22,16 @@ namespace PackageTracker.Core.Repositories.Dapper
         {
             string sql = @"
                 INSERT INTO PACKAGES 
-                (TrackingNumber, StatusId, Weight, Length, Width, Height, RecipientAddress, SenderAddress, CarrierId, UserId,
-                ServiceType, CreatedAt, UpdatedAt)
+                (TrackingNumber, StatusId, Weight, Length, Width, Height, RecipientAddress, SenderAddress, CarrierId, 
+                UserId, ServiceType, CreatedAt, UpdatedAt)
+                OUTPUT INSERTED.Id
                 VALUES
-                (@TrackingNumber, @StatusId, @Weight, @Length, @Width, @Height, @RecipientAddress, @SenderAddress, @CarrierId, 
-                @UserId, @ServiceType, @CreatedAt, @UpdatedAt)";
+                (@TrackingNumber, @StatusId, @Weight, @Length, @Width, @Height, @RecipientAddress, @SenderAddress, 
+                @CarrierId, @UserId, @ServiceType, @CreatedAt, @UpdatedAt)";
 
             using (var connection = new SqlConnection(_connectionString))
             {
-                var newId = await connection.ExecuteScalarAsync<Guid>(sql);
+                var newId = await connection.ExecuteScalarAsync<Guid>(sql, entity);
                 entity.Id = newId;
                 return entity;
             }
@@ -38,10 +39,8 @@ namespace PackageTracker.Core.Repositories.Dapper
 
         public async override Task DeleteAsync(Guid id)
         {
-            string sql = @"
-                DELETE FROM PACKAGES 
-                WHERE 
-                Id = @id";
+            string sql = @"DELETE FROM PACKAGES 
+                                WHERE Id = @id";
 
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -61,46 +60,107 @@ namespace PackageTracker.Core.Repositories.Dapper
             }
         }
 
-        public Task<IEnumerable<Package>> GetByCarrierIdAsync(Guid carrierId)
+        public async Task<IEnumerable<Package>> GetByCarrierIdAsync(Guid carrierId)
         {
-            throw new NotImplementedException();
-            /*
-            string sql = @"SELECT * FROM PACKAGES
-                WHERE 
-                Id = @id
-                Inner Join Carrier
-                On ";
-            */
+            string sql = @"SELECT * FROM Packages WHERE CarrierId = @carrierId;";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var packages = (await connection.QueryAsync<Package>(sql, new { carrierId })).ToList();
+                return packages;
+            }            
         }
 
-        public override Task<Package> GetByIdAsync(Guid id)
+        public async override Task<Package> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            string sql = @"SELECT * FROM Packages
+                                WHERE Id = @id;";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var package = await connection.QueryFirstOrDefaultAsync<Package>(sql, new { id }) 
+                    ?? Package.CreateEmpty();
+                return package;
+            }
         }
 
-        public Task<IEnumerable<Package>> GetByStatusAsync(string status)
+        public async Task<IEnumerable<Package>> GetByStatusAsync(string status)
         {
-            throw new NotImplementedException();
+            string sql = @"SELECT P.*, S.Name FROM Packages AS P
+                                INNER JOIN PackageStatuses AS S ON 
+                                P.StatusId = S.Id
+                                WHERE S.Name = @status";
+
+            using (var connection = new SqlConnection(_connectionString))
+            { 
+                var packages = (await connection.QueryAsync<Package>(sql, new { status })).ToList();
+                return packages;
+            }
         }
 
-        public Task<Package> GetByTrackingNumberAsync(string trackingNumber)
+        public async Task<Package> GetByTrackingNumberAsync(string trackingNumber)
         {
-            throw new NotImplementedException();
+            string sql = @"SELECT * FROM Packages 
+                                WHERE Packages.TrackingNumber = @trackingNumber";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var package = await connection.QueryFirstOrDefaultAsync<Package>(sql, new { trackingNumber })
+                    ?? Package.CreateEmpty();
+                return package;
+            }
         }
 
-        public Task<IEnumerable<Package>> GetByUserIdAsync(Guid userId)
+        public async Task<IEnumerable<Package>> GetByUserIdAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            string sql = @"SELECT * FROM Packages 
+                                WHERE Packages.UserId = @userId";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var packages = (await connection.QueryAsync<Package>(sql, new { userId })).ToList();
+                return packages;
+            }
         }
 
-        public Task<IEnumerable<PackageStatusHistory>> GetStatusHistoryAsync(Guid packageId)
+        public async Task<IEnumerable<PackageStatusHistory>> GetStatusHistoryAsync(Guid packageId)
         {
-            throw new NotImplementedException();
+            string sql = @"SELECT h.* FROM Packages AS P
+                            INNER JOIN PackageStatusHistory AS h ON 
+                            P.Id = h.PackageId
+                            WHERE p.UserId = @packageId";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var packages = (await connection.QueryAsync<PackageStatusHistory>(sql, new { packageId })).ToList();
+                return packages;
+            }
         }
 
-        public override Task UpdateAsync(Package entity)
+        public async override Task UpdateAsync(Package entity)
         {
-            throw new NotImplementedException();
+            string sql = @"
+                Update Packages
+	            SET 
+	                TrackingNumber = @TrackingNumber,
+	                StatusId = @StatusId,
+	                Weight = @Weight,
+	                Length = @Length,
+	                Width = @Width,
+	                Height = @Height,
+	                RecipientAddress = @RecipientAddress,
+	                SenderAddress = @SenderAddress,
+	                CarrierId = @CarrierId,
+	                UserId = @UserId,
+	                ServiceType = @ServiceType,
+	                CreatedAt = @CreatedAt,
+	                UpdatedAt = @UpdatedAt
+		        WHERE Id = @Id";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var entityUpdated = await connection.ExecuteAsync(sql, entity);
+            }
         }
 
         public Task UpdateStatusAsync(Guid id, string status, string notes = null)
