@@ -125,7 +125,8 @@ namespace PackageTracker.Core.Repositories.Dapper
 
         public async Task<IEnumerable<PackageStatusHistory>> GetStatusHistoryAsync(Guid packageId)
         {
-            string sql = @"SELECT h.* FROM Packages AS P
+            string sql = @"
+                            SELECT h.* FROM Packages AS P
                             INNER JOIN PackageStatusHistory AS h ON 
                             P.Id = h.PackageId
                             WHERE p.UserId = @packageId";
@@ -140,22 +141,22 @@ namespace PackageTracker.Core.Repositories.Dapper
         public async override Task UpdateAsync(Package entity)
         {
             string sql = @"
-                Update Packages
-	            SET 
-	                TrackingNumber = @TrackingNumber,
-	                StatusId = @StatusId,
-	                Weight = @Weight,
-	                Length = @Length,
-	                Width = @Width,
-	                Height = @Height,
-	                RecipientAddress = @RecipientAddress,
-	                SenderAddress = @SenderAddress,
-	                CarrierId = @CarrierId,
-	                UserId = @UserId,
-	                ServiceType = @ServiceType,
-	                CreatedAt = @CreatedAt,
-	                UpdatedAt = @UpdatedAt
-		        WHERE Id = @Id";
+                    Update Packages
+	                SET 
+	                    TrackingNumber = @TrackingNumber,
+	                    StatusId = @StatusId,
+	                    Weight = @Weight,
+	                    Length = @Length,
+	                    Width = @Width,
+	                    Height = @Height,
+	                    RecipientAddress = @RecipientAddress,
+	                    SenderAddress = @SenderAddress,
+	                    CarrierId = @CarrierId,
+	                    UserId = @UserId,
+	                    ServiceType = @ServiceType,
+	                    CreatedAt = @CreatedAt,
+	                    UpdatedAt = @UpdatedAt
+		            WHERE Id = @Id";
 
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -163,9 +164,42 @@ namespace PackageTracker.Core.Repositories.Dapper
             }
         }
 
-        public Task UpdateStatusAsync(Guid id, string status, string notes = null)
-        {
-            throw new NotImplementedException();
+        public async Task UpdateStatusAsync(Guid id, string status, string notes = null)
+        { 
+            using(var connection = new SqlConnection(_connectionString))
+            {
+                /// Get status Id
+                string sqlGetStatusId = @"
+                                SELECT Id 
+                                FROM PackageStatuses AS ps
+	                            WHERE ps.Name = @status";
+
+                var statusId = await connection.QueryFirstOrDefaultAsync<Guid>(sqlGetStatusId, new { status });
+
+                if (statusId == Guid.Empty)
+                    return;
+
+                /// Update package status
+                string sqlUpdateStatus = @"
+                            Update P
+	                        SET 
+	                        p.StatusId = @sqlGetStatusId
+	                        FROM Packages AS P
+		                    WHERE p.Id = @id";
+
+                await connection.ExecuteAsync(sqlUpdateStatus, new { status, statusId });
+
+                /// Update Package History
+                if(!string.IsNullOrEmpty(notes))
+                {
+                    string sqlUpdatePackageHistory = @"
+                                                INSERT INTO PackageStatusHistory (PackageId, StatusId, Timestamp, 
+                                                Notes)
+	                                            VALUES(@id, @getStatusId, GETDATE(), @notes)";
+
+                    await connection.ExecuteAsync(sqlUpdatePackageHistory, new { id, statusId, notes });
+                }
+            }
         }
 
         // Implementation using SQL queries and Dapper methods

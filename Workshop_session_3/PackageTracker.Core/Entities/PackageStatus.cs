@@ -13,5 +13,16 @@ namespace PackageTracker.Core.Entities
         public ICollection<Package> Packages { get; set; } = new List<Package>();
         public ICollection<PackageStatusHistory> PackageStatusHistories { get; set; } = new List<PackageStatusHistory>();
 
+        public static PackageStatus CreateEmpty()
+        {
+            return new PackageStatus
+            {
+                Id = Guid.Empty,
+                Name = "",
+                Packages = new List<Package>(),
+                PackageStatusHistories = new List<PackageStatusHistory>(),
+            };
+        }
+
     }
 }
