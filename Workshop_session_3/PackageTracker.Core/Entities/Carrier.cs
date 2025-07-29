@@ -9,7 +9,7 @@ namespace PackageTracker.Core.Entities
         public required bool IsActive { get; set; }
         public ICollection<Package> Packages { get; set; } = new List<Package>();
 
-        public static Carrier createEmpty()
+        public static Carrier CreateEmpty()
         {
             return new Carrier {
                 Name = "None",

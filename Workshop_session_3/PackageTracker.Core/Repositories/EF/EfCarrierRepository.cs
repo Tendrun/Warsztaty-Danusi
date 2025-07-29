@@ -18,14 +18,14 @@ namespace PackageTracker.Core.Repositories.EF
         {
             return await _dbSet
                 .FirstOrDefaultAsync(c => c.Email == email)
-                ?? Carrier.createEmpty();
+                ?? Carrier.CreateEmpty();
         }
 
         public async Task<Carrier> GetByPhoneNumberAsync(string phoneNumber)
         {
             return await _dbSet
                 .FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber)
-                ?? Carrier.createEmpty();
+                ?? Carrier.CreateEmpty();
         }
 
         public async Task UpdateIsActiveAsync(Guid id, bool isActive)

@@ -65,7 +65,7 @@ namespace PackageTracker.Core.Repositories.Dapper
             using (var connection = new SqlConnection(_connectionString))
             {
                 var carrier = await connection.QueryFirstOrDefaultAsync<Carrier>(sql, new { email })
-                    ?? Carrier.createEmpty();
+                    ?? Carrier.CreateEmpty();
                 return carrier;
             }
         }
@@ -78,7 +78,7 @@ namespace PackageTracker.Core.Repositories.Dapper
             using (var connection = new SqlConnection(_connectionString))
             {
                 var carrier = await connection.QueryFirstOrDefaultAsync<Carrier>(sql, new { id })
-                    ?? Carrier.createEmpty();
+                    ?? Carrier.CreateEmpty();
                 return carrier;
             }
         }
@@ -91,7 +91,7 @@ namespace PackageTracker.Core.Repositories.Dapper
             using (var connection = new SqlConnection(_connectionString))
             {
                 var carrier = await connection.QueryFirstOrDefaultAsync<Carrier>(sql, new { phoneNumber })
-                    ?? Carrier.createEmpty();
+                    ?? Carrier.CreateEmpty();
                 return carrier;
             }
         }
