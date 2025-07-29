@@ -31,6 +31,8 @@ namespace PackageTracker.Core.Repositories.Dapper
 
             using (var connection = new SqlConnection(_connectionString))
             {
+                /// Create new Package and get ID
+                /// You should get ID so you dont have to make another call
                 var newId = await connection.ExecuteScalarAsync<Guid>(sql, entity);
                 entity.Id = newId;
                 return entity;

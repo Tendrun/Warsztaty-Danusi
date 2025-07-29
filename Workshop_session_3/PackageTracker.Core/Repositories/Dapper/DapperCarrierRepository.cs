@@ -1,71 +1,130 @@
-﻿using PackageTracker.Core.Entities;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using PackageTracker.Core.Entities;
 using PackageTracker.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
+using static Dapper.SqlMapper;
 
 namespace PackageTracker.Core.Repositories.Dapper
 {
-    public class DapperCarrierRepository : DapperRepository<Package>, IPackageRepository
+    public class DapperCarrierRepository : DapperRepository<Carrier>, ICarrierRepository
     {
         public DapperCarrierRepository(IConfiguration configuration) : base(configuration) { }
 
-        public override Task<Package> AddAsync(Package entity)
+        public async override Task<Carrier> AddAsync(Carrier entity)
         {
-            throw new NotImplementedException();
+            string sql = @"
+                INSERT INTO Carriers 
+                (Name, Email, PhoneNumber, IsActive)
+                OUTPUT INSERTED.Id
+                VALUES
+                (@Name, @Email, @PhoneNumber, @IsActive)";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                /// Create new Carrier and get ID
+                /// You should get ID so you dont have to make another call
+                var newId = await connection.ExecuteScalarAsync<Guid>(sql, entity);
+                entity.Id = newId;
+                return entity;
+            }
         }
 
-        public override Task DeleteAsync(Guid id)
+        public async override Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            string sql = @"DELETE FROM CARRIERS 
+                                WHERE Id = @id";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.ExecuteAsync(sql, new { id });
+                return;
+            }
         }
 
-        public override Task<IEnumerable<Package>> GetAllAsync()
+        public async override Task<IEnumerable<Carrier>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            string sql = "SELECT * FROM CARRIERS";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var carriers = (await connection.QueryAsync<Carrier>(sql)).ToList();
+                return carriers;
+            }
         }
 
-        public Task<IEnumerable<Package>> GetByCarrierIdAsync(Guid carrierId)
+        public async Task<Carrier> GetByEmailAsync(string email)
         {
-            throw new NotImplementedException();
+            string sql = @"SELECT * FROM CARRIERS
+                            WHERE email = @email";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var carrier = await connection.QueryFirstOrDefaultAsync<Carrier>(sql, new { email })
+                    ?? Carrier.createEmpty();
+                return carrier;
+            }
         }
 
-        public override Task<Package> GetByIdAsync(Guid id)
+        public async override Task<Carrier> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            string sql = @"SELECT * FROM CARRIERS
+                            WHERE Id = @id";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var carrier = await connection.QueryFirstOrDefaultAsync<Carrier>(sql, new { id })
+                    ?? Carrier.createEmpty();
+                return carrier;
+            }
         }
 
-        public Task<IEnumerable<Package>> GetByStatusAsync(string status)
+        public async Task<Carrier> GetByPhoneNumberAsync(string phoneNumber)
         {
-            throw new NotImplementedException();
+            string sql = @"SELECT * FROM CARRIERS
+                            WHERE PhoneNumber = @phoneNumber";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var carrier = await connection.QueryFirstOrDefaultAsync<Carrier>(sql, new { phoneNumber })
+                    ?? Carrier.createEmpty();
+                return carrier;
+            }
         }
 
-        public Task<Package> GetByTrackingNumberAsync(string trackingNumber)
+        public async override Task UpdateAsync(Carrier entity)
         {
-            throw new NotImplementedException();
+            string sql = @"
+                    Update Carriers
+                    SET
+	                    Name = @Name,
+	                    Email = @Email,
+	                    PhoneNumber = @PhoneNumber,
+	                    IsActive = @IsActive
+                    WHERE Id = @Id";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var entityUpdated = await connection.ExecuteAsync(sql, entity);
+            }
         }
 
-        public Task<IEnumerable<Package>> GetByUserIdAsync(Guid userId)
+        public async Task UpdateIsActiveAsync(Guid id, bool isActive)
         {
-            throw new NotImplementedException();
-        }
+            string sql = @"
+                    Update Carriers 
+                    SET
+	                    IsActive = @isActive
+                    WHERE Id = @id";
 
-        public Task<IEnumerable<PackageStatusHistory>> GetStatusHistoryAsync(Guid packageId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Task UpdateAsync(Package entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateStatusAsync(Guid id, string status, string notes = null)
-        {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var entityUpdated = await connection.ExecuteAsync(sql, new { id, isActive });
+            }
         }
     }
 }
