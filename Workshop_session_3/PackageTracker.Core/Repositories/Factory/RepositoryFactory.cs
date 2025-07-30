@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PackageTracker.Core.Data;
-using PackageTracker.Core.Interfaces;
+using PackageTracker.Core.Interfaces.Repository;
 using PackageTracker.Core.Repositories.Dapper;
 using PackageTracker.Core.Repositories.EF;
 using System;

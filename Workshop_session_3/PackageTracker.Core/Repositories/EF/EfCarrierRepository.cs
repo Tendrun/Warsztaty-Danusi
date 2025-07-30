@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using PackageTracker.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using PackageTracker.Core.Data;
-using PackageTracker.Core.Interfaces;
+using PackageTracker.Core.Interfaces.Repository;
 
 namespace PackageTracker.Core.Repositories.EF
 {

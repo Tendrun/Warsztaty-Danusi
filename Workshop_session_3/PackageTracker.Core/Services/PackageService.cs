@@ -1,11 +1,12 @@
 ﻿using PackageTracker.Core.Entities;
-using PackageTracker.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PackageTracker.Core.DTOs;
+using PackageTracker.Core.Interfaces.Services;
+using PackageTracker.Core.Interfaces.Repository;
 
 namespace PackageTracker.Core.Services
 {

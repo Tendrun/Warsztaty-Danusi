@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PackageTracker.Core.DTOs;
 
-namespace PackageTracker.Core.Interfaces
+namespace PackageTracker.Core.Interfaces.Services
 {
     public interface IPackageService
     {

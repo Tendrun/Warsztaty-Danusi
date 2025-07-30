@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PackageTracker.Core.Data;
-using PackageTracker.Core.Interfaces;
+using PackageTracker.Core.Interfaces.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;

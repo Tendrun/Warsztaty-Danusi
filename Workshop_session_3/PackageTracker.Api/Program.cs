@@ -16,7 +16,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         maxRetryDelay: TimeSpan.FromSeconds(30),
         errorNumbersToAdd: null)));
 
-builder.Services.AddSingleton<IRepositoryFactory, RepositoryFactory>();
+
+/// I had to change to AddScoped From AddSingleton because there was error 
+builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
 
 // Register repositories using the factory
 builder.Services.AddScoped(provider =>

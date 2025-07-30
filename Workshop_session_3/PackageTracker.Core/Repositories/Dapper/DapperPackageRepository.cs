@@ -3,7 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
 using PackageTracker.Core.Entities;
-using PackageTracker.Core.Interfaces;
+using PackageTracker.Core.Interfaces.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
