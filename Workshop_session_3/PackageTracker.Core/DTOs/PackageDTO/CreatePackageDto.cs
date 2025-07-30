@@ -5,11 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PackageTracker.Core.DTOs
+namespace PackageTracker.Core.DTOs.PackageDTO
 {
-    public class UpdatePackageDto
+    public class CreatePackageDto
     {
         public required string TrackingNumber { get; set; }
+        public Guid StatusId { get; set; }
 
         public decimal? Weight;
         public decimal? Length;

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PackageTracker.Core.DTOs;
 using PackageTracker.Core.Interfaces.Services;
 using PackageTracker.Core.Interfaces.Repository;
+using PackageTracker.Core.DTOs.PackageDTO;
 
 namespace PackageTracker.Core.Services
 {

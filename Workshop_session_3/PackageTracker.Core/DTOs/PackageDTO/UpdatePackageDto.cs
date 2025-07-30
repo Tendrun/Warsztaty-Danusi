@@ -5,13 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PackageTracker.Core.DTOs
+namespace PackageTracker.Core.DTOs.PackageDTO
 {
-    public class PackageDto
+    public class UpdatePackageDto
     {
         public required string TrackingNumber { get; set; }
-
-        public Guid StatusId { get; set; }
 
         public decimal? Weight;
         public decimal? Length;
@@ -24,9 +22,5 @@ namespace PackageTracker.Core.DTOs
         public Guid CarrierId { get; set; }
         public Guid UserId { get; set; }
         public required Guid ServiceTypeId { get; set; }
-        public CarrierService ServiceType { get; set; } = default!;
-
-        public DateTime CreatedAt = DateTime.Now;
-        public required DateTime UpdatedAt;
     }
 }

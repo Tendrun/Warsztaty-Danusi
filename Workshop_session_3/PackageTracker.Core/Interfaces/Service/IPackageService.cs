@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PackageTracker.Core.DTOs;
+using PackageTracker.Core.DTOs.PackageDTO;
 
 namespace PackageTracker.Core.Interfaces.Services
 {
