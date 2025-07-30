@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using PackageTracker.Core.Interfaces;
+using PackageTracker.Core.DTOs;
+
 
 namespace PackageTracker.Api.Controllers
 {

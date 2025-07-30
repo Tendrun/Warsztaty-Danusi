@@ -15,7 +15,7 @@ namespace PackageTracker.Core.Entities
         public required string TrackingNumber { get; set; }
 
         public Guid StatusId { get; set; }
-        public required PackageStatus Status { get; set; }
+        public PackageStatus Status { get; set; } = default!;
 
         public decimal? Weight;
         public decimal? Length;
@@ -26,15 +26,15 @@ namespace PackageTracker.Core.Entities
         public required string SenderAddress;
 
         public Guid CarrierId { get; set; }
-        public required Carrier Carrier { get; set; }
+        public Carrier Carrier { get; set; } = default!;
 
         public Guid UserId { get; set; }
-        public required User User { get; set; }
+        public User User { get; set; } = default!;
 
         public required int ServiceTypeId { get; set; }
-        public required CarrierService ServiceType { get; set; }
+        public CarrierService ServiceType { get; set; } = default!;
 
-        public required DateTime CreatedAt = DateTime.Now;
+        public DateTime CreatedAt = DateTime.Now;
         public required DateTime UpdatedAt;
 
         public static Package CreateEmpty()
