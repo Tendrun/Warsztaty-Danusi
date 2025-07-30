@@ -32,7 +32,11 @@ namespace PackageTracker.Core.Repositories.Factory
 
         public ICarrierRepository CreateCarrierRepository()
         {
-            throw new NotImplementedException();
+            return _dataAccessStrategy.ToLower() switch
+            {
+                "dapper" => new DapperCarrierRepository(_configuration),
+                _ => new EfCarrierRepository(_dbContext)
+            };
         }
 
         public IPackageRepository CreatePackageRepository()
@@ -46,7 +50,11 @@ namespace PackageTracker.Core.Repositories.Factory
 
         public IUserRepository CreateUserRepository()
         {
-            throw new NotImplementedException();
+            return _dataAccessStrategy.ToLower() switch
+            {
+                "dapper" => new DapperUserRepository(_configuration),
+                _ => new EfUserRepository(_dbContext)
+            };
         }
 
         // Similar methods for CreateCarrierRepository and CreateUserRepository

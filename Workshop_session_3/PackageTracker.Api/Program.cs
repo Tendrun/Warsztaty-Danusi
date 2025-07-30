@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PackageTracker.Core.Data;
 using PackageTracker.Core.Repositories.EF;
+using PackageTracker.Core.Repositories.Factory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         maxRetryCount: 5,
         maxRetryDelay: TimeSpan.FromSeconds(30),
         errorNumbersToAdd: null)));
+
+builder.Services.AddSingleton<IRepositoryFactory, RepositoryFactory>();
+
+// Register repositories using the factory
+builder.Services.AddScoped(provider =>
+    provider.GetRequiredService<IRepositoryFactory>().CreatePackageRepository());
+builder.Services.AddScoped(provider =>
+    provider.GetRequiredService<IRepositoryFactory>().CreateCarrierRepository());
+builder.Services.AddScoped(provider =>
+    provider.GetRequiredService<IRepositoryFactory>().CreateUserRepository());
 
 var app = builder.Build();
 
