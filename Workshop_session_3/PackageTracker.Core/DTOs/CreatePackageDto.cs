@@ -22,6 +22,6 @@ namespace PackageTracker.Core.DTOs
 
         public Guid CarrierId { get; set; }
         public Guid UserId { get; set; }
-        public required int ServiceTypeId { get; set; }
+        public required Guid ServiceTypeId { get; set; }
     }
 }

@@ -31,7 +31,7 @@ namespace PackageTracker.Core.Entities
         public Guid UserId { get; set; }
         public User User { get; set; } = default!;
 
-        public required int ServiceTypeId { get; set; }
+        public required Guid ServiceTypeId { get; set; }
         public CarrierService ServiceType { get; set; } = default!;
 
         public DateTime CreatedAt = DateTime.Now;
@@ -49,7 +49,7 @@ namespace PackageTracker.Core.Entities
                 User = User.CreateEmpty(),
                 UserId = Guid.Empty,
                 ServiceType = CarrierService.createEmpty(),
-                ServiceTypeId = 0,
+                ServiceTypeId = Guid.Empty,
                 RecipientAddress = "",
                 SenderAddress = "",
                 CreatedAt = DateTime.Now,
