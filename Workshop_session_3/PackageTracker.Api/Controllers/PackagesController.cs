@@ -8,6 +8,15 @@ using PackageTracker.Core.DTOs.Status;
 
 namespace PackageTracker.Api.Controllers
 {
+    /// <summary>
+    /// I'm not satisfied with the logic here.
+    /// Due to tight coupling in the mapping process,
+    /// the controller is currently handling mapping,
+    /// which should ideally be done in the service layer.
+    /// Leaving it as is for now to maintain task flow consistency,
+    /// will refactor properly later.
+    /// </summary>
+
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/packages")]

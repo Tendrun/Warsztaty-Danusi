@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using PackageTracker.Core.DTOs.Carrier;
 using PackageTracker.Core.Entities;
 using PackageTracker.Core.Interfaces.Service;
 using PackageTracker.Core.Interfaces.Services;
+using static Dapper.SqlMapper;
 
 namespace PackageTracker.Api.Controllers
 {
@@ -12,59 +15,63 @@ namespace PackageTracker.Api.Controllers
     public class CarriersController : ControllerBase
     {
         private readonly ICarrierService _carrierService;
-        private readonly IMapper _mapper;
         private readonly ILogger<CarriersController> _logger;
 
         public CarriersController(
         ICarrierService carrierService,
-        IMapper mapper,
         ILogger<CarriersController> logger)
         {
             _carrierService = carrierService;
-            _mapper = mapper;
             _logger = logger;
         }
 
+        [HttpPost]
         public async Task<ActionResult<Carrier>> AddAsync(CreateCarrierDTO entity)
         {
-            var 
+            return await _carrierService.AddAsync(entity);
         }
 
-        public async Task<ActionResult> DeleteAsync(Guid id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
-
+            await _carrierService.DeleteAsync(id);
+            return NoContent();
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Carrier>>> GetAllAsync()
         {
-            var carrier = await _carrierService.GetAllAsync();
-            return Ok(_mapper.Map<IEnumerable<Carrier>>(carrier));
+            var carriers = await _carrierService.GetAllAsync();
+            return Ok(carriers);
         }
 
         public async Task<ActionResult<Carrier>> GetByEmailAsync(string email)
         {
-
+            var carriers = await _carrierService.GetByEmailAsync(email);
+            return Ok(carriers);
         }
 
         public async Task<ActionResult<Carrier>> GetByIdAsync(Guid id)
         {
-           
+            var carriers = await _carrierService.GetByIdAsync(id);
+            return Ok(carriers);
         }
 
         public async Task<ActionResult<Carrier>> GetByPhoneNumberAsync(string phoneNumber)
         {
-
+            var carriers = await _carrierService.GetByPhoneNumberAsync(phoneNumber);
+            return Ok(carriers);
         }
 
-        public async Task<ActionResult> UpdateAsync(Carrier entity)
+        public async Task<IActionResult> UpdateAsync(UpdateCarrierDTO entity)
         {
-
+            await _carrierService.UpdateAsync(entity);
+            return NoContent();
         }
 
-        public async Task<ActionResult> UpdateIsActiveAsync(Guid id, bool isActive)
+        public async Task<IActionResult> UpdateIsActiveAsync(Guid id, bool isActive)
         {
-
+            await _carrierService.UpdateIsActiveAsync(id, isActive);
+            return NoContent();
         }
     }
 }
