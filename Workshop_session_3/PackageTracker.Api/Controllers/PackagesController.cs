@@ -19,7 +19,7 @@ namespace PackageTracker.Api.Controllers
 
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/packages")]
+    [Route("api/v{version:apiVersion}/packages/")]
     public class PackagesController : ControllerBase
     {
         private readonly IPackageService _packageService;
@@ -36,7 +36,7 @@ namespace PackageTracker.Api.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("getAll")]
         public async Task<ActionResult<IEnumerable<PackageDto>>> GetPackages()
         {
             var packages = await _packageService.GetAllAsync();

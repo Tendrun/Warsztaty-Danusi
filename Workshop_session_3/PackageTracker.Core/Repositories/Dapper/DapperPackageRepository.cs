@@ -23,11 +23,11 @@ namespace PackageTracker.Core.Repositories.Dapper
             string sql = @"
                 INSERT INTO PACKAGES 
                 (TrackingNumber, StatusId, Weight, Length, Width, Height, RecipientAddress, SenderAddress, CarrierId, 
-                UserId, ServiceType, CreatedAt, UpdatedAt)
+                UserId, ServiceTypeId, CreatedAt, UpdatedAt)
                 OUTPUT INSERTED.Id
                 VALUES
                 (@TrackingNumber, @StatusId, @Weight, @Length, @Width, @Height, @RecipientAddress, @SenderAddress, 
-                @CarrierId, @UserId, @ServiceType, @CreatedAt, @UpdatedAt)";
+                @CarrierId, @UserId, @ServiceTypeId, @CreatedAt, @UpdatedAt)";
 
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -155,7 +155,7 @@ namespace PackageTracker.Core.Repositories.Dapper
 	                    SenderAddress = @SenderAddress,
 	                    CarrierId = @CarrierId,
 	                    UserId = @UserId,
-	                    ServiceType = @ServiceType,
+	                    ServiceTypeId = @ServiceTypeId,
 	                    CreatedAt = @CreatedAt,
 	                    UpdatedAt = @UpdatedAt
 		            WHERE Id = @Id";

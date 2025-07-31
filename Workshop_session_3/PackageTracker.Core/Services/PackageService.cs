@@ -42,8 +42,9 @@ namespace PackageTracker.Core.Services
         public async Task<IEnumerable<PackageDto>> GetAllAsync()
         {
             var packages = await packageRepository.GetAllAsync();
-            var packagesDTO = mapper.Map<List<PackageDto>>(packages);
 
+            
+            var packagesDTO = mapper.Map<List<PackageDto>>(packages);
             return packagesDTO;
         }
 

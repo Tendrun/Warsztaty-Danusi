@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PackageTracker.Core.DTOs.PackageDTO;
 using PackageTracker.Core.DTOs.User;
 using PackageTracker.Core.Entities;
 using System;
@@ -15,6 +16,8 @@ namespace PackageTracker.Core.Mapping
         {
             CreateMap<CreateUserDTO, User>();
             CreateMap<User, UserDTO>();
+            CreateMap<Package, PackageDto>();
+            CreateMap<PackageDto, Package>();
         }
     }
 }
