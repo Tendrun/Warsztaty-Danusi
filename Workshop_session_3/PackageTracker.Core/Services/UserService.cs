@@ -1,68 +1,103 @@
-﻿using PackageTracker.Core.DTOs.User;
+﻿using AutoMapper;
+using PackageTracker.Core.DTOs.User;
+using PackageTracker.Core.Entities;
+using PackageTracker.Core.Interfaces.Repository;
 using PackageTracker.Core.Interfaces.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using static Dapper.SqlMapper;
+using static PackageTracker.Core.Utils.PasswordHashGenerator;
 
 namespace PackageTracker.Core.Services
 {
     public class UserService : IUserService
     {
-        public Task<UserDTO?> AddAsync(CreateUserDTO entity)
+        IUserRepository userRepository;
+        Mapper mapper;
+
+        public UserService(IUserRepository userRepository, Mapper mapper)
         {
-            throw new NotImplementedException();
+            this.userRepository = userRepository;
+            this.mapper = mapper;
         }
 
-        public Task DeleteAsync(Guid id)
+        public async Task<UserDTO?> AddAsync(CreateUserDTO entity)
         {
-            throw new NotImplementedException();
+            var user = mapper.Map<User>(entity);
+            var userAdded = await userRepository.AddAsync(user);
+
+            var userDTO = mapper.Map<UserDTO>(userAdded);
+
+            return userDTO;
         }
 
-        public Task<IEnumerable<UserDTO>> GetAllAsync()
+        public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            await userRepository.DeleteAsync(id);
         }
 
-        public Task<IEnumerable<UserDTO?>> GetByAddressAsync(string address)
+        public async Task<IEnumerable<UserDTO>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var users = await userRepository.GetAllAsync();
+            var usersDTO = mapper.Map<List<UserDTO>>(users);
+
+            return usersDTO;
         }
 
-        public Task<UserDTO?> GetByIdAsync(Guid id)
+        public async Task<IEnumerable<UserDTO?>> GetByAddressAsync(string address)
         {
-            throw new NotImplementedException();
+            var users = await userRepository.GetByAddressAsync(address);
+            var userDTOs = mapper.Map<List<UserDTO>>(users);
+
+            return userDTOs;
         }
 
-        public Task<UserDTO?> GetByUsernameAsync(string username)
+        public async Task<UserDTO?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var user = await userRepository.GetByIdAsync(id);
+            var userDTO = mapper.Map<UserDTO>(user);
+
+            return userDTO;
         }
 
-        public Task UpdateAsync(UpdateUserDTO entity)
+        public async Task<UserDTO?> GetByUsernameAsync(string username)
         {
-            throw new NotImplementedException();
+            var user = await userRepository.GetByUsernameAsync(username);
+            var userDTO = mapper.Map<UserDTO>(user);
+
+            return userDTO;
         }
 
-        public Task UpdateFirstNameAsync(Guid id, string firstName)
+        public async Task UpdateAsync(UpdateUserDTO entity)
         {
-            throw new NotImplementedException();
+            var user = mapper.Map<User>(entity);
+            await userRepository.UpdateAsync(user);
         }
 
-        public Task UpdateLastNameAsync(Guid id, string lastName)
+        public async Task UpdateFirstNameAsync(Guid id, string firstName)
         {
-            throw new NotImplementedException();
+            await userRepository.UpdateFirstNameAsync(id, firstName);
         }
 
-        public Task UpdatePasswordAsync(Guid id, string password)
+        public async Task UpdateLastNameAsync(Guid id, string lastName)
         {
-            throw new NotImplementedException();
+            await userRepository.UpdateFirstNameAsync(id, lastName);
         }
 
-        public Task UpdateUsernameAsync(Guid id, string username)
+        public async Task UpdatePasswordAsync(Guid id, string password)
         {
-            throw new NotImplementedException();
+            string hashedpassword = HashPassword(password);
+
+            await userRepository.UpdatePasswordAsync(id, hashedpassword);
+        }
+
+        public async Task UpdateUsernameAsync(Guid id, string username)
+        {
+            await userRepository.UpdateUsernameAsync(id, username);
         }
     }
 }
