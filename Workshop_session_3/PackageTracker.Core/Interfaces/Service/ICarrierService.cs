@@ -5,17 +5,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PackageTracker.Core.DTOs.Carrier;
 
 namespace PackageTracker.Core.Interfaces.Service
 {
     public interface ICarrierService
     {
-        Task<Carrier> AddAsync(CreateCarrierDTO entity);
+        Task<CarrierDTO> AddAsync(CreateCarrierDTO entity);
         Task DeleteAsync(Guid id);
-        Task<IEnumerable<Carrier>> GetAllAsync();
-        Task<Carrier?> GetByEmailAsync(string email);
-        Task<Carrier?> GetByIdAsync(Guid id);
-        Task<Carrier?> GetByPhoneNumberAsync(string phoneNumber);
+        Task<IEnumerable<CarrierDTO>> GetAllAsync();
+        Task<CarrierDTO?> GetByEmailAsync(string email);
+        Task<CarrierDTO?> GetByIdAsync(Guid id);
+        Task<CarrierDTO?> GetByPhoneNumberAsync(string phoneNumber);
         Task UpdateAsync(UpdateCarrierDTO entity);
         Task UpdateIsActiveAsync(Guid id, bool isActive);
     }

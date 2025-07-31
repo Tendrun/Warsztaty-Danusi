@@ -21,11 +21,12 @@ namespace PackageTracker.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<Carrier> AddAsync(CreateCarrierDTO entity)
+        public async Task<CarrierDTO> AddAsync(CreateCarrierDTO entity)
         {
             var carrier = _mapper.Map<Carrier>(entity);
+            var carrierDTO = await _carrierRepository.AddAsync(carrier);
 
-            return await _carrierRepository.AddAsync(carrier);
+            return _mapper.Map<CarrierDTO>(carrierDTO);
         }
 
         public async Task DeleteAsync(Guid id)
@@ -33,24 +34,36 @@ namespace PackageTracker.Core.Services
             await _carrierRepository.DeleteAsync(id);
         }
 
-        public async Task<IEnumerable<Carrier>> GetAllAsync()
+        public async Task<IEnumerable<CarrierDTO>> GetAllAsync()
         {
-            return await _carrierRepository.GetAllAsync();
+            var carriers = await _carrierRepository.GetAllAsync();
+            var carriersDTO = _mapper.Map<List<CarrierDTO>>(carriers);
+
+            return carriersDTO;
         }
 
-        public async Task<Carrier?> GetByEmailAsync(string email)
+        public async Task<CarrierDTO?> GetByEmailAsync(string email)
         {
-            return await _carrierRepository.GetByEmailAsync(email);
+            var carrier = await _carrierRepository.GetByEmailAsync(email);
+            var carrierDTO = _mapper.Map<CarrierDTO>(carrier);
+
+            return carrierDTO;
         }
 
-        public async Task<Carrier?> GetByIdAsync(Guid id)
+        public async Task<CarrierDTO?> GetByIdAsync(Guid id)
         {
-            return await _carrierRepository.GetByIdAsync(id);
+            var carrier = await _carrierRepository.GetByIdAsync(id);
+            var carrierDTO = _mapper.Map<CarrierDTO>(carrier);
+
+            return carrierDTO;
         }
 
-        public async Task<Carrier?> GetByPhoneNumberAsync(string phoneNumber)
+        public async Task<CarrierDTO?> GetByPhoneNumberAsync(string phoneNumber)
         {
-            return await _carrierRepository.GetByPhoneNumberAsync(phoneNumber);
+            var carrier = await _carrierRepository.GetByPhoneNumberAsync(phoneNumber);
+            var carrierDTO = _mapper.Map<CarrierDTO>(carrier);
+
+            return carrierDTO;
         }
 
         public async Task UpdateAsync(UpdateCarrierDTO entity)

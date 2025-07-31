@@ -26,7 +26,7 @@ namespace PackageTracker.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Carrier>> AddAsync(CreateCarrierDTO entity)
+        public async Task<ActionResult<CarrierDTO>> AddAsync(CreateCarrierDTO entity)
         {
             return await _carrierService.AddAsync(entity);
         }
@@ -38,25 +38,25 @@ namespace PackageTracker.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Carrier>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<CarrierDTO>>> GetAllAsync()
         {
             var carriers = await _carrierService.GetAllAsync();
             return Ok(carriers);
         }
 
-        public async Task<ActionResult<Carrier>> GetByEmailAsync(string email)
+        public async Task<ActionResult<CarrierDTO>> GetByEmailAsync(string email)
         {
             var carriers = await _carrierService.GetByEmailAsync(email);
             return Ok(carriers);
         }
 
-        public async Task<ActionResult<Carrier>> GetByIdAsync(Guid id)
+        public async Task<ActionResult<CarrierDTO>> GetByIdAsync(Guid id)
         {
             var carriers = await _carrierService.GetByIdAsync(id);
             return Ok(carriers);
         }
 
-        public async Task<ActionResult<Carrier>> GetByPhoneNumberAsync(string phoneNumber)
+        public async Task<ActionResult<CarrierDTO>> GetByPhoneNumberAsync(string phoneNumber)
         {
             var carriers = await _carrierService.GetByPhoneNumberAsync(phoneNumber);
             return Ok(carriers);

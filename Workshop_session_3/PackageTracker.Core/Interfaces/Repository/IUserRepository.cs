@@ -10,7 +10,7 @@ namespace PackageTracker.Core.Interfaces.Repository
     public interface IUserRepository : IRepository<User>
     {
         Task<User> GetByUsernameAsync(string username);
-        // Wiele osób może mieszkać pod jednym adresem
+        /// Wiele osób może mieszkać pod jednym adresem
         Task<IEnumerable<User>> GetByAddressAsync(string address);
 
         Task UpdateUsernameAsync(Guid id, string username);
