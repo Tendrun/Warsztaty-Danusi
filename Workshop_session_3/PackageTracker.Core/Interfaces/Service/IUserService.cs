@@ -13,7 +13,7 @@ namespace PackageTracker.Core.Interfaces.Service
         Task<IEnumerable<UserDTO>> GetAllAsync();
         Task<UserDTO?> GetByIdAsync(Guid id);
         Task<UserDTO?> AddAsync(CreateUserDTO entity);
-        Task UpdateAsync(UpdateUserDTO entity);
+        Task UpdateAsync(Guid id, UpdateUserDTO entity);
         Task DeleteAsync(Guid id);
 
         Task<UserDTO?> GetByUsernameAsync(string username);

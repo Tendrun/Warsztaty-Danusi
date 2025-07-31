@@ -23,7 +23,7 @@ namespace PackageTracker.Core.Repositories.Dapper
         public abstract Task<IEnumerable<T>> GetAllAsync();
         public abstract Task<T> GetByIdAsync(Guid id);
         public abstract Task<T> AddAsync(T entity);
-        public abstract Task UpdateAsync(T entity);
+        public abstract Task UpdateAsync(Guid id, T entity);
         public abstract Task DeleteAsync(Guid id);
 
         // Abstract methods to be implemented by derived classes

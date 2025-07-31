@@ -75,7 +75,7 @@ namespace PackageTracker.Core.Services
         {
             Package package = convertUpdatePackageDTO(id, dto);
 
-            await packageRepository.UpdateAsync(package);
+            await packageRepository.UpdateAsync(id, package);
         }
 
         public async Task UpdateStatusAsync(Guid id, string status, string? notes = null)

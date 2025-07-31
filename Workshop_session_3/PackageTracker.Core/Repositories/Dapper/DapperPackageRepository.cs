@@ -140,7 +140,7 @@ namespace PackageTracker.Core.Repositories.Dapper
             }
         }
 
-        public async override Task UpdateAsync(Package entity)
+        public async override Task UpdateAsync(Guid id, Package entity)
         {
             string sql = @"
                     Update Packages

@@ -72,10 +72,10 @@ namespace PackageTracker.Core.Services
             return userDTO;
         }
 
-        public async Task UpdateAsync(UpdateUserDTO entity)
+        public async Task UpdateAsync(Guid id, UpdateUserDTO entity)
         {
             var user = mapper.Map<User>(entity);
-            await userRepository.UpdateAsync(user);
+            await userRepository.UpdateAsync(id, user);
         }
 
         public async Task UpdateFirstNameAsync(Guid id, string firstName)

@@ -25,7 +25,7 @@ namespace PackageTracker.Api.Controllers
             _logger = logger;
         }
 
-        [HttpPost("{entity}")]
+        [HttpPost]
         public async Task<ActionResult<CarrierDTO>> AddAsync(CreateCarrierDTO entity)
         {
             return await _carrierService.AddAsync(entity);
@@ -65,10 +65,10 @@ namespace PackageTracker.Api.Controllers
             return Ok(carriers);
         }
 
-        [HttpPut("{entity}")]
-        public async Task<IActionResult> UpdateAsync(UpdateCarrierDTO entity)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync(Guid id, UpdateCarrierDTO entity)
         {
-            await _carrierService.UpdateAsync(entity);
+            await _carrierService.UpdateAsync(id, entity);
             return NoContent();
         }
 

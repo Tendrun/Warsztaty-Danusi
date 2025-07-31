@@ -66,11 +66,11 @@ namespace PackageTracker.Core.Services
             return carrierDTO;
         }
 
-        public async Task UpdateAsync(UpdateCarrierDTO entity)
+        public async Task UpdateAsync(Guid id, UpdateCarrierDTO entity)
         {
             var carrier = _mapper.Map<Carrier>(entity);
 
-            await _carrierRepository.UpdateAsync(carrier);
+            await _carrierRepository.UpdateAsync(id, carrier);
         }
 
         public async Task UpdateIsActiveAsync(Guid id, bool isActive)

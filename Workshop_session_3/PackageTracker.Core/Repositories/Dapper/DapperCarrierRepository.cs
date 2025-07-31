@@ -96,7 +96,7 @@ namespace PackageTracker.Core.Repositories.Dapper
             }
         }
 
-        public async override Task UpdateAsync(Carrier entity)
+        public async override Task UpdateAsync(Guid id, Carrier entity)
         {
             string sql = @"
                     Update Carriers

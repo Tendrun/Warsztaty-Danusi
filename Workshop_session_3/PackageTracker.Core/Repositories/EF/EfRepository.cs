@@ -49,9 +49,15 @@ namespace PackageTracker.Core.Repositories.EF
             return await _dbSet.FindAsync(id);
         }
 
-        public async Task UpdateAsync(T entity)
+        public async Task UpdateAsync(Guid id, T entity)
         {
-            _dbSet.Update(entity);
+            var existingEntity = await GetByIdAsync(id);
+
+            if (existingEntity == null)
+                throw new KeyNotFoundException($"Entity with id {id} not found");
+
+            _context.Entry(existingEntity).CurrentValues.SetValues(entity);
+
             await _context.SaveChangesAsync();
         }
     }
