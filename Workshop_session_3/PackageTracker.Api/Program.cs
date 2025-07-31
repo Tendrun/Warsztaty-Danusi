@@ -3,8 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PackageTracker.Core.Data;
 using PackageTracker.Core.DTOs.Auth;
+using PackageTracker.Core.Interfaces.Service;
+using PackageTracker.Core.Interfaces.Services;
+using PackageTracker.Core.Mapping;
 using PackageTracker.Core.Repositories.EF;
 using PackageTracker.Core.Repositories.Factory;
+using PackageTracker.Core.Services;
 using PackageTracker.Core.TokenJWT;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,7 +33,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         jwtOptions.MapInboundClaims = false;
     });
 
+builder.Services.AddControllers();
+
+/// Versioning
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+});
 builder.Services.AddAuthorization();
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
 // Add services to the container.
@@ -49,6 +64,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 /// I had to change to AddScoped From AddSingleton because there was error 
 builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
+builder.Services.AddScoped<IPackageService, PackageService>();
 
 // Register repositories using the factory
 builder.Services.AddScoped(provider =>
@@ -60,16 +76,20 @@ builder.Services.AddScoped(provider =>
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllers();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
 
 var summaries = new[]
 {

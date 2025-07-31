@@ -22,9 +22,9 @@ namespace PackageTracker.Core.Repositories.Dapper
         public async override Task<User> AddAsync(User entity)
         {
             string sql = @"
-                INSERT INTO USERS (Username, PasswordHash, FirstName, LastName, Address, CreatedAt)
+                INSERT INTO USERS (Username, Email, PasswordHash, FirstName, LastName, Address, CreatedAt)
                 OUTPUT INSERTED.Id
-                VALUES (@Username, @PasswordHash, @FirstName, @LastName, @Address, @CreatedAt)";
+                VALUES (@Username, @Email, @PasswordHash, @FirstName, @LastName, @Address, @CreatedAt)";
 
             using (var connection = new SqlConnection(_connectionString))
             {

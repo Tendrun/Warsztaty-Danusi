@@ -15,9 +15,9 @@ namespace PackageTracker.Core.Services
     public class PackageService : IPackageService
     {
         IPackageRepository packageRepository;
-        Mapper mapper;
+        IMapper mapper;
 
-        public PackageService(IPackageRepository packageRepository, Mapper mapper) 
+        public PackageService(IPackageRepository packageRepository, IMapper mapper) 
         { 
             this.packageRepository = packageRepository; 
             this.mapper = mapper;

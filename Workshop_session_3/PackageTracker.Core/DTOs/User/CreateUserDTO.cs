@@ -8,7 +8,6 @@ namespace PackageTracker.Core.DTOs.User
 {
     public class CreateUserDTO
     {
-        public Guid Id { get; set; }
         public required string Username { get; set; }
         public required string Password { get; set; }
         public required string FirstName { get; set; }

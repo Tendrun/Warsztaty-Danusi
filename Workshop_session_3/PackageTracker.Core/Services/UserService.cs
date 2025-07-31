@@ -4,6 +4,7 @@ using PackageTracker.Core.DTOs.User;
 using PackageTracker.Core.Entities;
 using PackageTracker.Core.Interfaces.Repository;
 using PackageTracker.Core.Interfaces.Service;
+using PackageTracker.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,9 @@ namespace PackageTracker.Core.Services
         public async Task<UserDTO?> AddAsync(CreateUserDTO entity)
         {
             var user = mapper.Map<User>(entity);
+
+            user.PasswordHash = HashPassword(entity.Password);
+
             var userAdded = await userRepository.AddAsync(user);
 
             var userDTO = mapper.Map<UserDTO>(userAdded);
