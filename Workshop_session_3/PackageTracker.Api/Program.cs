@@ -2,12 +2,19 @@ using Microsoft.EntityFrameworkCore;
 using PackageTracker.Core.Data;
 using PackageTracker.Core.Repositories.EF;
 using PackageTracker.Core.Repositories.Factory;
+using PackageTracker.Core.TokenJWT;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+// Configure options
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("JwtSettings"));
+
+builder.Services.Configure<PackageTracker.Core.Data.DataAccessSettings>(
+    builder.Configuration.GetSection("DataAccess"));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
