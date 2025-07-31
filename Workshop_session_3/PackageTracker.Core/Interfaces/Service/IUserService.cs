@@ -1,4 +1,5 @@
-﻿using PackageTracker.Core.DTOs.User;
+﻿using PackageTracker.Core.DTOs.Auth;
+using PackageTracker.Core.DTOs.User;
 using PackageTracker.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -24,5 +25,12 @@ namespace PackageTracker.Core.Interfaces.Service
         Task UpdatePasswordAsync(Guid id, string password);
         Task UpdateFirstNameAsync(Guid id, string firstName);
         Task UpdateLastNameAsync(Guid id, string lastName);
+
+        /// <summary>
+        /// Auth
+        /// </summary>
+        /// <param name="loginDTO"></param>
+        /// <returns></returns>
+        Task<TokenJwtResponseDto> Login(LoginDTO loginDTO);
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using PackageTracker.Core.DTOs.Auth;
 using PackageTracker.Core.Entities;
 using PackageTracker.Core.Interfaces.Repository;
+using PackageTracker.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,6 +101,37 @@ namespace PackageTracker.Core.Repositories.Dapper
                     ?? User.CreateEmpty();
 
                 return user;
+            }
+        }
+
+        public async Task<TokenJwtResponseDto> Login(LoginDTO loginDTO)
+        {
+            string sqlGetHashedPassword = @"
+                        SELECT PasswordHash FROM USERS
+                        WHERE email = 'Piotr@gmail.com'";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var hashedPassword = await connection.QueryFirstOrDefaultAsync<string>(sqlGetHashedPassword, 
+                    new { loginDTO.Password });
+
+                /// If doesn't exist return nothing
+                if (hashedPassword == null)
+                {
+                    return new TokenJwtResponseDto { TokenJWT = "" };
+                }
+
+                /// If password incorrect return empty token JWT
+                if(!VerifyPassword(loginDTO.Password, hashedPassword)) 
+                {
+                    return new TokenJwtResponseDto { TokenJWT = ""};
+                }
+
+                var token = TokenJwtGenerator.GenerateToken(loginDTO.Username, loginDTO.Password);
+
+                var tokenDto = new TokenJwtResponseDto { TokenJWT = token };
+
+                return tokenDto;
             }
         }
 

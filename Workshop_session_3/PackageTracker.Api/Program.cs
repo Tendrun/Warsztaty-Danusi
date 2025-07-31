@@ -1,17 +1,40 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PackageTracker.Core.Data;
+using PackageTracker.Core.DTOs.Auth;
 using PackageTracker.Core.Repositories.EF;
 using PackageTracker.Core.Repositories.Factory;
 using PackageTracker.Core.TokenJWT;
 
 var builder = WebApplication.CreateBuilder(args);
 
+TokenJwtGenerator.Initialize(builder.Configuration);
+
+// Configure options
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(jwtOptions =>
+    {
+        // Optional if the MetadataAddress is specified
+        jwtOptions.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = builder.Configuration.GetSection("JwtSettings:SecretKey").Get<SecurityKey>(),
+            ValidIssuer = builder.Configuration.GetSection("JwtSettings:Issuer").Get<string>()
+        };
+
+        jwtOptions.MapInboundClaims = false;
+    });
+
+builder.Services.AddAuthorization();
+
+
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-// Configure options
-builder.Services.Configure<JwtSettings>(
-    builder.Configuration.GetSection("JwtSettings"));
 
 builder.Services.Configure<PackageTracker.Core.Data.DataAccessSettings>(
     builder.Configuration.GetSection("DataAccess"));
@@ -36,6 +59,9 @@ builder.Services.AddScoped(provider =>
     provider.GetRequiredService<IRepositoryFactory>().CreateUserRepository());
 
 var app = builder.Build();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

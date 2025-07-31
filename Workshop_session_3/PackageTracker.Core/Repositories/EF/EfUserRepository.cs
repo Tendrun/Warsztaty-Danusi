@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PackageTracker.Core.Data;
+using PackageTracker.Core.DTOs.Auth;
 using PackageTracker.Core.Entities;
 using PackageTracker.Core.Interfaces.Repository;
+using PackageTracker.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,6 +79,35 @@ namespace PackageTracker.Core.Repositories.EF
             Username.Username = username;
 
             _context.SaveChanges();
+        }
+
+        public async Task<TokenJwtResponseDto> Login(LoginDTO loginDTO)
+        {
+            var user = await _dbSet
+                .FirstOrDefaultAsync(u => u.Email == loginDTO.Email);
+
+
+            if (user == null)
+                return new TokenJwtResponseDto
+                {
+                    TokenJWT = ""
+                };
+
+            bool isPasswordValid = VerifyPassword(loginDTO.Password, user.PasswordHash);
+
+            if (!isPasswordValid)
+                return new TokenJwtResponseDto
+                {
+                    TokenJWT = ""
+                };
+
+
+            string token = TokenJwtGenerator.GenerateToken(user.Username, "User");
+
+            return new TokenJwtResponseDto
+            {
+                TokenJWT = token
+            };
         }
     }
 }

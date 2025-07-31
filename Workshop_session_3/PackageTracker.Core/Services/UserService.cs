@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PackageTracker.Core.DTOs.Auth;
 using PackageTracker.Core.DTOs.User;
 using PackageTracker.Core.Entities;
 using PackageTracker.Core.Interfaces.Repository;
@@ -70,6 +71,11 @@ namespace PackageTracker.Core.Services
             var userDTO = mapper.Map<UserDTO>(user);
 
             return userDTO;
+        }
+
+        public async Task<TokenJwtResponseDto> Login(LoginDTO loginDTO)
+        {
+            return await userRepository.Login(loginDTO);
         }
 
         public async Task UpdateAsync(Guid id, UpdateUserDTO entity)
