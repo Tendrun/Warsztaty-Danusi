@@ -25,49 +25,54 @@ namespace PackageTracker.Api.Controllers
             _logger = logger;
         }
 
-        [HttpPost]
+        [HttpPost("{entity}")]
         public async Task<ActionResult<CarrierDTO>> AddAsync(CreateCarrierDTO entity)
         {
             return await _carrierService.AddAsync(entity);
         }
-
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
             await _carrierService.DeleteAsync(id);
             return NoContent();
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<CarrierDTO>>> GetAllAsync()
         {
             var carriers = await _carrierService.GetAllAsync();
             return Ok(carriers);
         }
 
+        [HttpGet("email/{email}")]
         public async Task<ActionResult<CarrierDTO>> GetByEmailAsync(string email)
         {
             var carriers = await _carrierService.GetByEmailAsync(email);
             return Ok(carriers);
         }
 
+        [HttpGet("{id}")]
         public async Task<ActionResult<CarrierDTO>> GetByIdAsync(Guid id)
         {
             var carriers = await _carrierService.GetByIdAsync(id);
             return Ok(carriers);
         }
 
+        [HttpGet("phoneNumber/{phoneNumber}")]
         public async Task<ActionResult<CarrierDTO>> GetByPhoneNumberAsync(string phoneNumber)
         {
             var carriers = await _carrierService.GetByPhoneNumberAsync(phoneNumber);
             return Ok(carriers);
         }
 
+        [HttpPut("{entity}")]
         public async Task<IActionResult> UpdateAsync(UpdateCarrierDTO entity)
         {
             await _carrierService.UpdateAsync(entity);
             return NoContent();
         }
 
+        [HttpPut("isActive/{id}")]
         public async Task<IActionResult> UpdateIsActiveAsync(Guid id, bool isActive)
         {
             await _carrierService.UpdateIsActiveAsync(id, isActive);
