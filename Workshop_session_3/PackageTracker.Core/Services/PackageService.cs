@@ -7,21 +7,31 @@ using System.Threading.Tasks;
 using PackageTracker.Core.Interfaces.Services;
 using PackageTracker.Core.Interfaces.Repository;
 using PackageTracker.Core.DTOs.PackageDTO;
+using PackageTracker.Core.DTOs.Status;
+using AutoMapper;
 
 namespace PackageTracker.Core.Services
 {
     public class PackageService : IPackageService
     {
         IPackageRepository packageRepository;
+        Mapper mapper;
 
+        public PackageService(IPackageRepository packageRepository, Mapper mapper) 
+        { 
+            this.packageRepository = packageRepository; 
+            this.mapper = mapper;
+        }
 
-        public PackageService(IPackageRepository packageRepository) { this.packageRepository = packageRepository; }
-
-        public async Task<Package> CreateAsync(CreatePackageDto dto)
+        public async Task<PackageDto> CreateAsync(CreatePackageDto dto)
         {
             var package = convertCreatePackageDto(dto);
+            var newPackage = await packageRepository.AddAsync(package);
 
-            return await packageRepository.AddAsync(package);
+            var packageDTO = mapper
+                .Map<PackageDto>(newPackage);
+
+            return packageDTO;
         }
 
         public async Task DeleteAsync(Guid id)
@@ -29,24 +39,36 @@ namespace PackageTracker.Core.Services
             await packageRepository.DeleteAsync(id);
         }
 
-        public async Task<IEnumerable<Package>> GetAllAsync()
+        public async Task<IEnumerable<PackageDto>> GetAllAsync()
         {
-            return await packageRepository.GetAllAsync();
+            var packages = await packageRepository.GetAllAsync();
+            var packagesDTO = mapper.Map<List<PackageDto>>(packages);
+
+            return packagesDTO;
         }
 
-        public async Task<Package?> GetByIdAsync(Guid id)
+        public async Task<PackageDto?> GetByIdAsync(Guid id)
         {
-            return await packageRepository.GetByIdAsync(id);
+            var package = await packageRepository.GetByIdAsync(id);
+            var packageDTO = mapper.Map<PackageDto>(package);
+
+            return packageDTO;
         }
 
-        public async Task<Package?> GetByTrackingNumberAsync(string trackingNumber)
+        public async Task<PackageDto?> GetByTrackingNumberAsync(string trackingNumber)
         {
-            return await packageRepository.GetByTrackingNumberAsync(trackingNumber);
+            var package = await packageRepository.GetByTrackingNumberAsync(trackingNumber);
+            var packageDTO = mapper.Map<PackageDto>(package);
+
+            return packageDTO;
         }
 
-        public async Task<IEnumerable<PackageStatusHistory>> GetStatusHistoryAsync(Guid packageId)
+        public async Task<IEnumerable<PackageStatusHistoryDTO>> GetStatusHistoryAsync(Guid packageId)
         {
-            return await packageRepository.GetStatusHistoryAsync(packageId);
+            var packages = await packageRepository.GetStatusHistoryAsync(packageId);
+            var packagesDTO = mapper.Map<List<PackageStatusHistoryDTO>>(packages);
+
+            return packagesDTO;
         }
 
         public async Task UpdateAsync(Guid id, UpdatePackageDto dto)

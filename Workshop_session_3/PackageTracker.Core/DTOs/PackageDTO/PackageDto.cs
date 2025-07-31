@@ -9,6 +9,7 @@ namespace PackageTracker.Core.DTOs.PackageDTO
 {
     public class PackageDto
     {
+        public Guid Id { get; set; }
         public required string TrackingNumber { get; set; }
 
         public Guid StatusId { get; set; }
