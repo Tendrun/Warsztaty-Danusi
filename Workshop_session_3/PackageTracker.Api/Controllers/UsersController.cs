@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PackageTracker.Core.DTOs.User;
 using PackageTracker.Core.Interfaces.Service;
+using System.Net;
+using static Dapper.SqlMapper;
 
 namespace PackageTracker.Api.Controllers
 {
@@ -21,7 +23,7 @@ namespace PackageTracker.Api.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IEnumerable<UserDTO>> GetAllAsync() 
+        public async Task<IEnumerable<UserDTO>> GetAllAsync()
         {
             return await _userService.GetAllAsync();
         }
@@ -38,52 +40,53 @@ namespace PackageTracker.Api.Controllers
             return await _userService.AddAsync(entity);
         }
 
-        public async Task UpdateAsync(UpdateUserDTO entity)
+        [HttpPut("{id}")]
+        public async Task UpdateAsync(Guid id, UpdateUserDTO entity)
         {
-            throw new NotImplementedException();
+            await _userService.UpdateAsync(id, entity);
         }
 
+        [HttpDelete("{id}")]
         public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
-
+            await _userService.DeleteAsync(id);
         }
 
+        [HttpGet("Username/{username}")]
         public async Task<UserDTO?> GetByUsernameAsync(string username)
         {
-            throw new NotImplementedException();
-
+            return await _userService.GetByUsernameAsync(username);
         }
 
+        [HttpGet("Address/{address}")]
         /// Wiele osób może mieszkać pod jednym adresem
         public async Task<IEnumerable<UserDTO?>> GetByAddressAsync(string address)
         {
-            throw new NotImplementedException();
-
+            return await _userService.GetByAddressAsync(address);
         }
 
+        [HttpPatch("{id}")]
         public async Task UpdateUsernameAsync(Guid id, string username)
         {
-            throw new NotImplementedException();
-
+            await _userService.UpdateUsernameAsync(id, username);
         }
 
+        [HttpPatch("Password/{id}")]
         public async Task UpdatePasswordAsync(Guid id, string password)
         {
-            throw new NotImplementedException();
-
+            await _userService.UpdatePasswordAsync(id, password);
         }
 
+        [HttpPatch("firstName/{id}")]
         public async Task UpdateFirstNameAsync(Guid id, string firstName)
         {
-            throw new NotImplementedException();
-
+            await _userService.UpdateFirstNameAsync(id, firstName);
         }
 
+        [HttpPatch("lastName/{id}")]
         public async Task UpdateLastNameAsync(Guid id, string lastName)
         {
-            throw new NotImplementedException();
-
+            await _userService.UpdateLastNameAsync(id, lastName);
         }
     }
 }
