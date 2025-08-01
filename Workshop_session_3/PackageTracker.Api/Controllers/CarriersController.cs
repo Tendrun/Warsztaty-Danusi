@@ -66,7 +66,7 @@ namespace PackageTracker.Api.Controllers
             return Ok(carriers);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}/services")]
         public async Task<IActionResult> UpdateAsync(Guid id, UpdateCarrierDTO entity)
         {
             await _carrierService.UpdateAsync(id, entity);

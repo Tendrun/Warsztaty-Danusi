@@ -62,5 +62,22 @@ namespace PackageTracker.Core.Repositories.EF
 
             return serviceTypesFormated;
         }
+
+        public override async Task UpdateAsync(Guid id, Carrier entity)
+        {
+            var existingEntity = await GetByIdAsync(id);
+
+            if (existingEntity == null)
+                throw new KeyNotFoundException($"Entity with id {id} not found");
+
+            existingEntity.Name = entity.Name ?? existingEntity.Name;
+            existingEntity.Email = entity.Email ?? existingEntity.Email;
+            existingEntity.PhoneNumber = entity.PhoneNumber ?? existingEntity.PhoneNumber;
+            existingEntity.IsActive = entity.IsActive ? true : existingEntity.IsActive;
+
+            _context.Update(existingEntity);
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

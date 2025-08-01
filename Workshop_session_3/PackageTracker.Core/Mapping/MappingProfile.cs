@@ -28,7 +28,7 @@ namespace PackageTracker.Core.Mapping
             CreateMap<CreateCarrierDTO, CarrierDTO>();
             CreateMap<Carrier, UpdateCarrierDTO>();
             CreateMap<Carrier, CarrierDTO>();
-
+            CreateMap<UpdateCarrierDTO, Carrier>();
         }
     }
 }
