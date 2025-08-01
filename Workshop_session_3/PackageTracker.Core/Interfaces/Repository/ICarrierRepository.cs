@@ -1,4 +1,5 @@
 ﻿using PackageTracker.Core.DTOs.Carrier;
+using PackageTracker.Core.DTOs.CarrierService;
 using PackageTracker.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,6 @@ namespace PackageTracker.Core.Interfaces.Repository
         Task<Carrier> GetByPhoneNumberAsync(string phoneNumber);
         Task UpdateIsActiveAsync(Guid id, bool isActive);
         Task <IEnumerable<string>> GetServicesSupportedByCarrier(Guid id);
+        Task UpdateCarrierServiceInformation(Guid id, List<UpdateCarrierService> updateCarrierServices);
     }
 }

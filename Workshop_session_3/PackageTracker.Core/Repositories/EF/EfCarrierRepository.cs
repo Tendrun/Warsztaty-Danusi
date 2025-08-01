@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PackageTracker.Core.Data;
+using PackageTracker.Core.DTOs.CarrierService;
 using PackageTracker.Core.Entities;
 using PackageTracker.Core.Interfaces.Repository;
 using Polly;
@@ -76,6 +78,25 @@ namespace PackageTracker.Core.Repositories.EF
             existingEntity.IsActive = entity.IsActive ? true : existingEntity.IsActive;
 
             _context.Update(existingEntity);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateCarrierServiceInformation(Guid id, List<UpdateCarrierService> updateCarrierServices)
+        {
+            foreach(UpdateCarrierService updateCarrier in updateCarrierServices)
+            {
+                var existingCarrier = await _context.carrierServices.FindAsync(updateCarrier.Id);
+
+                if (existingCarrier == null)
+                    throw new KeyNotFoundException($"Entity with id {id} not found");
+
+                existingCarrier.Name = updateCarrier.Name ?? existingCarrier.Name;
+                existingCarrier.Description = updateCarrier.Description ?? existingCarrier.Description;
+                existingCarrier.Price = updateCarrier.Price;
+
+                _context.Update(existingCarrier);
+            }
 
             await _context.SaveChangesAsync();
         }

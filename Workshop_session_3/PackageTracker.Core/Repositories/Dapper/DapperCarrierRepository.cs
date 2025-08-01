@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using PackageTracker.Core.DTOs.CarrierService;
 using PackageTracker.Core.Entities;
 using PackageTracker.Core.Interfaces.Repository;
 using System;
@@ -131,6 +132,22 @@ namespace PackageTracker.Core.Repositories.Dapper
             using (var connection = new SqlConnection(_connectionString))
             {
                 var entityUpdated = await connection.ExecuteAsync(sql, entity);
+            }
+        }
+
+        public async Task UpdateCarrierServiceInformation(Guid id, List<UpdateCarrierService> updateCarrierServices)
+        {
+            string sql = @"
+                    Update CarrierServices
+                    SET 
+	                    Name = @Name, 
+	                    Description = @Description,
+	                    Price = @Price
+                    Where Id = @id";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var entityUpdated = await connection.ExecuteAsync(sql, updateCarrierServices);
             }
         }
 

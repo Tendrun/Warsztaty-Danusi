@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using PackageTracker.Core.DTOs.Carrier;
+using PackageTracker.Core.DTOs.CarrierService;
 using PackageTracker.Core.Entities;
 using PackageTracker.Core.Interfaces.Service;
 using PackageTracker.Core.Interfaces.Services;
@@ -85,6 +86,13 @@ namespace PackageTracker.Api.Controllers
         {
             var services = await _carrierService.GetServicesSupportedByCarrier(id);
             return Ok(services);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCarrierInformation(Guid id, List<UpdateCarrierService> updateCarrierServices)
+        {
+            await _carrierService.UpdateCarrierServiceInformation(id, updateCarrierServices);
+            return NoContent();
         }
     }
 }

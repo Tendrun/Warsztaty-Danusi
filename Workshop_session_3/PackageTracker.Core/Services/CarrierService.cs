@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PackageTracker.Core.DTOs.Carrier;
+using PackageTracker.Core.DTOs.CarrierService;
 using PackageTracker.Core.Entities;
 using PackageTracker.Core.Interfaces.Repository;
 using PackageTracker.Core.Interfaces.Service;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PackageTracker.Core.Services
@@ -81,6 +83,11 @@ namespace PackageTracker.Core.Services
         public async Task<IEnumerable<string>> GetServicesSupportedByCarrier(Guid id)
         {
             return await _carrierRepository.GetServicesSupportedByCarrier(id);
+        }
+
+        public async Task UpdateCarrierServiceInformation(Guid id, List<UpdateCarrierService> updateCarrierServices)
+        {
+            await _carrierRepository.UpdateCarrierServiceInformation(id , updateCarrierServices);
         }
     }
 }
