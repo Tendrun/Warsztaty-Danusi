@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PackageTracker.Core.Data;
 
@@ -11,9 +12,11 @@ using PackageTracker.Core.Data;
 namespace PackageTracker.Core.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250801090104_CarrierSupportedServicesAdded")]
+    partial class CarrierSupportedServicesAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,17 +72,6 @@ namespace PackageTracker.Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("carrierServices");
-                });
-
-            modelBuilder.Entity("PackageTracker.Core.Entities.CarrierSupportedServices", b =>
-                {
-                    b.Property<Guid>("CarrierId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ServiceId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.ToTable("CarrierSupportedServices");
                 });
 
             modelBuilder.Entity("PackageTracker.Core.Entities.Package", b =>

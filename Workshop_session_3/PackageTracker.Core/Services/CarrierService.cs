@@ -16,7 +16,7 @@ namespace PackageTracker.Core.Services
         ICarrierRepository _carrierRepository;
         private readonly IMapper _mapper;
 
-        public CarrierService(ICarrierRepository carrierRepository, Mapper mapper) { 
+        public CarrierService(ICarrierRepository carrierRepository, IMapper mapper) { 
             _carrierRepository = carrierRepository; 
             _mapper = mapper;
         }
@@ -76,6 +76,11 @@ namespace PackageTracker.Core.Services
         public async Task UpdateIsActiveAsync(Guid id, bool isActive)
         {
             await _carrierRepository.UpdateIsActiveAsync(id, isActive);
+        }
+
+        public async Task<IEnumerable<string>> GetServicesSupportedByCarrier(Guid id)
+        {
+            return await _carrierRepository.GetServicesSupportedByCarrier(id);
         }
     }
 }

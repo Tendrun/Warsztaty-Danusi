@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using PackageTracker.Core.Data;
+using PackageTracker.Core.Entities;
+using PackageTracker.Core.Interfaces.Repository;
+using Polly;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PackageTracker.Core.Entities;
-using Microsoft.EntityFrameworkCore;
-using PackageTracker.Core.Data;
-using PackageTracker.Core.Interfaces.Repository;
 
 namespace PackageTracker.Core.Repositories.EF
 {
@@ -40,6 +42,25 @@ namespace PackageTracker.Core.Repositories.EF
             carrier.IsActive = isActive;
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<string>> GetServicesSupportedByCarrier(Guid id)
+        {
+            var supportedServices = await _context
+                .CarrierSupportedServices
+                .Where(css => css.CarrierId == id)
+                .ToListAsync();
+
+            var supportedServicesIds = supportedServices.Select(u => u.ServiceId).ToList();
+
+            var serviceTypes = await _context
+                .carrierServices
+                .Where(cs => supportedServicesIds.Contains(cs.Id))
+                .ToListAsync();
+
+            var serviceTypesFormated = serviceTypes.Select(u => u.Name).ToList();
+
+            return serviceTypesFormated;
         }
     }
 }

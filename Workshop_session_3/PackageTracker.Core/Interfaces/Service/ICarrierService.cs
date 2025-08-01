@@ -18,5 +18,6 @@ namespace PackageTracker.Core.Interfaces.Service
         Task<CarrierDTO?> GetByPhoneNumberAsync(string phoneNumber);
         Task UpdateAsync(Guid id, UpdateCarrierDTO entity);
         Task UpdateIsActiveAsync(Guid id, bool isActive);
+        Task<IEnumerable<string>> GetServicesSupportedByCarrier(Guid id);
     }
 }

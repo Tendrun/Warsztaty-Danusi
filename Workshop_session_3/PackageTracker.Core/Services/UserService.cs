@@ -19,9 +19,9 @@ namespace PackageTracker.Core.Services
     public class UserService : IUserService
     {
         IUserRepository userRepository;
-        Mapper mapper;
+        IMapper mapper;
 
-        public UserService(IUserRepository userRepository, Mapper mapper)
+        public UserService(IUserRepository userRepository, IMapper mapper)
         {
             this.userRepository = userRepository;
             this.mapper = mapper;
@@ -31,7 +31,7 @@ namespace PackageTracker.Core.Services
         {
             var user = mapper.Map<User>(entity);
 
-            user.PasswordHash = HashPassword(entity.Password);
+            user.PasswordHash = HashPassword(entity.passwordHash);
 
             var userAdded = await userRepository.AddAsync(user);
 
@@ -85,6 +85,10 @@ namespace PackageTracker.Core.Services
         public async Task UpdateAsync(Guid id, UpdateUserDTO entity)
         {
             var user = mapper.Map<User>(entity);
+
+            // Hash with real algorithm
+            entity.PasswordHash = HashPassword(entity.PasswordHash);
+
             await userRepository.UpdateAsync(id, user);
         }
 

@@ -8,7 +8,7 @@ namespace PackageTracker.Api.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/users")]
+    [Route("api/v{version:apiVersion}/users/")]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -22,7 +22,7 @@ namespace PackageTracker.Api.Controllers
             _logger = logger;
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<IEnumerable<UserDTO>> GetAllAsync()
         {
             return await _userService.GetAllAsync();
@@ -34,7 +34,7 @@ namespace PackageTracker.Api.Controllers
             return await _userService.GetByIdAsync(id);
         }
 
-        [HttpPost("{entity}")]
+        [HttpPost]
         public async Task<UserDTO?> AddAsync(CreateUserDTO entity)
         {
             return await _userService.AddAsync(entity);

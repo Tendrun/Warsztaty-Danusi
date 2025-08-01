@@ -11,7 +11,7 @@ namespace PackageTracker.Api.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/carriers")]
+    [Route("api/v{version:apiVersion}/carriers/")]
     public class CarriersController : ControllerBase
     {
         private readonly ICarrierService _carrierService;
@@ -30,6 +30,7 @@ namespace PackageTracker.Api.Controllers
         {
             return await _carrierService.AddAsync(entity);
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
@@ -37,7 +38,7 @@ namespace PackageTracker.Api.Controllers
             return NoContent();
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<CarrierDTO>>> GetAllAsync()
         {
             var carriers = await _carrierService.GetAllAsync();
@@ -77,6 +78,13 @@ namespace PackageTracker.Api.Controllers
         {
             await _carrierService.UpdateIsActiveAsync(id, isActive);
             return NoContent();
+        }
+
+        [HttpGet("{id}/services")]
+        public async Task<ActionResult<IEnumerable<string>>> GetServicesSupportedByCarrier(Guid id)
+        {
+            var services = await _carrierService.GetServicesSupportedByCarrier(id);
+            return Ok(services);
         }
     }
 }

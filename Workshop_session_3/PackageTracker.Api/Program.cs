@@ -44,6 +44,7 @@ builder.Services.AddApiVersioning(options =>
 });
 builder.Services.AddAuthorization();
 
+// Mapping configuration
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
@@ -65,6 +66,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 /// I had to change to AddScoped From AddSingleton because there was error 
 builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
 builder.Services.AddScoped<IPackageService, PackageService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICarrierService, CarrierService>();
+
 
 // Register repositories using the factory
 builder.Services.AddScoped(provider =>

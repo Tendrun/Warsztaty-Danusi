@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PackageTracker.Core.Data;
+using PackageTracker.Core.Entities;
 using PackageTracker.Core.Interfaces.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,11 +32,17 @@ namespace PackageTracker.Core.Repositories.EF
 
         public async Task DeleteAsync(Guid id)
         {
-            var entity = await GetByIdAsync(id);
+            var user = await _context.Users.Include(u => u.Packages).FirstOrDefaultAsync(u => u.Id == id);
 
-            if(entity != null)
+
+            if (user != null)
             {
-                _dbSet.Remove(entity);
+                // Usuń powiązane paczki
+                _context.packages.RemoveRange(user.Packages);
+
+                // Usuń użytkownika
+                _context.Users.Remove(user);
+
                 await _context.SaveChangesAsync();
             }
         }

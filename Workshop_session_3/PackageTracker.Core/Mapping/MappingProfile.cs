@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PackageTracker.Core.DTOs.Carrier;
 using PackageTracker.Core.DTOs.PackageDTO;
 using PackageTracker.Core.DTOs.User;
 using PackageTracker.Core.Entities;
@@ -14,10 +15,20 @@ namespace PackageTracker.Core.Mapping
     {
         public MappingProfile()
         {
+            // User types
             CreateMap<CreateUserDTO, User>();
             CreateMap<User, UserDTO>();
+            CreateMap<UpdateUserDTO, User>();
+
+            // Package types
             CreateMap<Package, PackageDto>();
             CreateMap<PackageDto, Package>();
+
+            // Carrier types
+            CreateMap<CreateCarrierDTO, CarrierDTO>();
+            CreateMap<Carrier, UpdateCarrierDTO>();
+            CreateMap<Carrier, CarrierDTO>();
+
         }
     }
 }

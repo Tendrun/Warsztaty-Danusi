@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using PackageTracker.Core.Entities;
 using PackageTracker.Core.Interfaces.Repository;
 using System;
@@ -93,6 +94,26 @@ namespace PackageTracker.Core.Repositories.Dapper
                 var carrier = await connection.QueryFirstOrDefaultAsync<Carrier>(sql, new { phoneNumber })
                     ?? Carrier.CreateEmpty();
                 return carrier;
+            }
+        }
+
+        public async Task<IEnumerable<string>> GetServicesSupportedByCarrier(Guid id)
+        {
+            string sql = @"
+                        SELECT CS.Name as Services 
+                        FROM CarrierSupportedServices AS CSS
+                        INNER JOIN Carriers AS C 
+	                        ON CSS.CarrierId = C.Id
+                        INNER JOIN CarrierServices AS CS 
+	                        ON CSS.ServiceId = CS.Id
+                        WHERE C.Id = @id;";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var Services = (await connection.QueryAsync<string>(sql)).ToList()
+                    ?? new List<string>();
+
+                return Services;
             }
         }
 

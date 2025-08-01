@@ -18,6 +18,7 @@ namespace PackageTracker.Core.Data
         public DbSet<PackageStatus> PackageStatuses { get; set; }
         public DbSet<PackageStatusHistory> PackageStatusHistories { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<CarrierSupportedServices> CarrierSupportedServices { get; set; }
 
         public ApplicationDbContext() { }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {
