@@ -25,10 +25,18 @@ namespace PackageTracker.Core.Services
 
         public async Task<CarrierDTO> AddAsync(CreateCarrierDTO entity)
         {
-            var carrier = _mapper.Map<Carrier>(entity);
-            var carrierDTO = await _carrierRepository.AddAsync(carrier);
+            var carrier = new Carrier
+            {
+                Email = entity.Email,
+                Name = entity.Name,
+                PhoneNumber = entity.PhoneNumber,
+            };
 
-            return _mapper.Map<CarrierDTO>(carrierDTO);
+            var supportedCarrierServices = new List<SupportedServicesDto>(entity.supportedServices);
+            var carrierServices = _mapper.Map<List<Entities.CarrierService>>(entity.supportedServices);
+            var newCarrier = await _carrierRepository.AddAsync(carrier, carrierServices, supportedCarrierServices);
+
+            return _mapper.Map<CarrierDTO>(newCarrier);
         }
 
         public async Task DeleteAsync(Guid id)

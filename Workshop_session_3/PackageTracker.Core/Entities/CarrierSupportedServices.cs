@@ -13,6 +13,10 @@ namespace PackageTracker.Core.Entities
         public required Guid CarrierId { get; set; }
         public required Guid ServiceId { get; set; }
 
+        public Carrier Carrier { get; set; } = default!;
+        public CarrierService Service { get; set; } = default!;
+
+
         public static CarrierSupportedServices CreateEmpty()
         {
             return new CarrierSupportedServices

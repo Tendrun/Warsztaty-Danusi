@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PackageTracker.Core.Data;
+using PackageTracker.Core.DTOs.Carrier;
 using PackageTracker.Core.DTOs.CarrierService;
 using PackageTracker.Core.Entities;
 using PackageTracker.Core.Interfaces.Repository;
@@ -99,6 +100,29 @@ namespace PackageTracker.Core.Repositories.EF
             }
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Carrier> AddAsync(Carrier carrier, List<CarrierService> carrierServices,
+            List<SupportedServicesDto> supportedCarrierServices)
+        {
+            await _dbSet.AddAsync(carrier);
+            await _context.SaveChangesAsync();
+
+            var newCarrierSupportedServices = supportedCarrierServices.Select(s => new CarrierSupportedServices
+            {
+                CarrierId = carrier.Id,
+                ServiceId = s.Id 
+            }).ToList();
+
+            await _context.CarrierSupportedServices.AddRangeAsync(newCarrierSupportedServices);
+            await _context.SaveChangesAsync();
+
+
+            await _context.carrierServices.AddRangeAsync(carrierServices);
+            await _context.SaveChangesAsync();
+
+
+            return carrier;
         }
     }
 }

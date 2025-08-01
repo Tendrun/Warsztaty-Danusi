@@ -58,6 +58,21 @@ namespace PackageTracker.Core.Data
                 .Property(p => p.Height)
                 .HasPrecision(10, 2);
 
+
+            // Foreign keys
+            modelBuilder.Entity<CarrierSupportedServices>()
+                .HasKey(css => new { css.CarrierId, css.ServiceId }); 
+
+            modelBuilder.Entity<CarrierSupportedServices>()
+                .HasOne(css => css.Carrier)
+                .WithMany()
+                .HasForeignKey(css => css.CarrierId);
+
+            modelBuilder.Entity<CarrierSupportedServices>()
+                .HasOne(css => css.Service)
+                .WithMany()
+                .HasForeignKey(css => css.ServiceId);
+
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -1,10 +1,12 @@
-﻿using PackageTracker.Core.DTOs.Carrier;
+﻿using Microsoft.EntityFrameworkCore;
+using PackageTracker.Core.DTOs.Carrier;
 using PackageTracker.Core.DTOs.CarrierService;
 using PackageTracker.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PackageTracker.Core.Interfaces.Repository
@@ -16,5 +18,8 @@ namespace PackageTracker.Core.Interfaces.Repository
         Task UpdateIsActiveAsync(Guid id, bool isActive);
         Task <IEnumerable<string>> GetServicesSupportedByCarrier(Guid id);
         Task UpdateCarrierServiceInformation(Guid id, List<UpdateCarrierService> updateCarrierServices);
+        new abstract Task<Carrier> AddAsync(Carrier carrier, List<CarrierService> carrierServices,
+            List<SupportedServicesDto> supportedCarrierServices);
+        new abstract Task UpdateAsync(Guid id, Carrier entity);
     }
 }

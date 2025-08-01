@@ -24,7 +24,7 @@ namespace PackageTracker.Core.Repositories.EF
             _dbSet = context.Set<T>();
         }
 
-        public async Task<T> AddAsync(T entity)
+        public virtual async Task<T> AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
             await _context.SaveChangesAsync();
@@ -33,13 +33,10 @@ namespace PackageTracker.Core.Repositories.EF
 
         public virtual async Task DeleteAsync(Guid id)
         {
-            Debug.WriteLine($"idddddddddddddddd = {id}");
             var entity = await GetByIdAsync(id);
-            Debug.WriteLine("entity" + entity);
 
             if (entity != null)
             {
-                Debug.WriteLine("Removed");
                 _dbSet.Remove(entity);
                 await _context.SaveChangesAsync();
             }

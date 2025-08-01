@@ -1,4 +1,5 @@
-﻿using PackageTracker.Core.DTOs.Auth;
+﻿using Microsoft.AspNetCore.Mvc;
+using PackageTracker.Core.DTOs.Auth;
 using PackageTracker.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace PackageTracker.Core.Interfaces.Repository
         Task UpdatePasswordAsync(Guid id, string password);
         Task UpdateFirstNameAsync(Guid id, string firstName);
         Task UpdateLastNameAsync(Guid id, string lastName);
+
+        new abstract Task DeleteAsync(Guid id);
 
         /// <summary>
         /// Auth

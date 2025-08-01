@@ -1,11 +1,13 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using PackageTracker.Core.DTOs.Carrier;
 using PackageTracker.Core.DTOs.CarrierService;
 using PackageTracker.Core.Entities;
 using PackageTracker.Core.Interfaces.Repository;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,8 +19,13 @@ namespace PackageTracker.Core.Repositories.Dapper
     {
         public DapperCarrierRepository(IConfiguration configuration) : base(configuration) { }
 
-        public async override Task<Carrier> AddAsync(Carrier entity)
+        public async Task<Carrier> AddAsync(Carrier carrier, List<CarrierService> carrierServices,
+            List<SupportedServicesDto> supportedCarrierServices)
         {
+            throw new NotImplementedException();
+            /*
+            Debug.WriteLine("Implementation is degraded");
+
             string sql = @"
                 INSERT INTO Carriers 
                 (Name, Email, PhoneNumber, IsActive)
@@ -34,6 +41,12 @@ namespace PackageTracker.Core.Repositories.Dapper
                 entity.Id = newId;
                 return entity;
             }
+            */
+        }
+
+        public override Task<Carrier> AddAsync(Carrier entity)
+        {
+            throw new NotImplementedException();
         }
 
         public async override Task DeleteAsync(Guid id)
