@@ -109,5 +109,22 @@ namespace PackageTracker.Core.Repositories.EF
                 TokenJWT = token
             };
         }
+
+        public override async Task DeleteAsync(Guid id)
+        {
+            var user = await _context.Users.Include(u => u.Packages).FirstOrDefaultAsync(u => u.Id == id);
+
+
+            if (user != null)
+            {
+                // Usuń powiązane paczki
+                _context.packages.RemoveRange(user.Packages);
+
+                // Usuń użytkownika
+                _context.Users.Remove(user);
+
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

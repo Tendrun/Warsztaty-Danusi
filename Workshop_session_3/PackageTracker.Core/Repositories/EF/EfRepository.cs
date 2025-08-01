@@ -4,6 +4,7 @@ using PackageTracker.Core.Entities;
 using PackageTracker.Core.Interfaces.Repository;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
@@ -30,19 +31,16 @@ namespace PackageTracker.Core.Repositories.EF
             return entity;
         }
 
-        public async Task DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
-            var user = await _context.Users.Include(u => u.Packages).FirstOrDefaultAsync(u => u.Id == id);
+            Debug.WriteLine($"idddddddddddddddd = {id}");
+            var entity = await GetByIdAsync(id);
+            Debug.WriteLine("entity" + entity);
 
-
-            if (user != null)
+            if (entity != null)
             {
-                // Usuń powiązane paczki
-                _context.packages.RemoveRange(user.Packages);
-
-                // Usuń użytkownika
-                _context.Users.Remove(user);
-
+                Debug.WriteLine("Removed");
+                _dbSet.Remove(entity);
                 await _context.SaveChangesAsync();
             }
         }
